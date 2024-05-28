@@ -6,7 +6,7 @@ import About from "./pages/About";
 import Profile from "./pages/Profile";
 import Header from "./components/Header";
 
-const ComponentName = () => {
+const App = () => {
   return (
     <BrowserRouter className="text-red-500">
       <Header />
@@ -21,4 +21,4 @@ const ComponentName = () => {
   );
 };
 
-export default ComponentName;
+export default App;
