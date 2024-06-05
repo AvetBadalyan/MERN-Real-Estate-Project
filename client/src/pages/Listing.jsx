@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore from "swiper";
 import { useSelector } from "react-redux";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
@@ -16,7 +15,6 @@ import {
 import Contact from "../components/Contact";
 
 export default function Listing() {
-  SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -55,13 +53,15 @@ export default function Listing() {
       )}
       {listing && !loading && !error && (
         <div>
-          <Swiper navigation>
+          <Swiper modules={[Navigation]} slidesPerView={1} navigation>
             {listing.imageUrls.map((url) => (
               <SwiperSlide key={url}>
                 <div
-                  className="h-[550px]"
+                  className="h-[550px] w-full"
                   style={{
-                    background: `url(${url}) center no-repeat`,
+                    backgroundImage: `url('${url}')`,
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                   }}
                 ></div>
@@ -93,7 +93,7 @@ export default function Listing() {
                 : listing.regularPrice.toLocaleString("en-US")}
               {listing.type === "rent" && " / month"}
             </p>
-            <p className="flex items-center mt-6 gap-2 text-slate-600  text-sm">
+            <p className="flex items-center mt-6 gap-2 text-slate-600 text-sm">
               <FaMapMarkerAlt className="text-green-700" />
               {listing.address}
             </p>
