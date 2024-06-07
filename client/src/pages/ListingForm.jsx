@@ -106,10 +106,17 @@ export default function ListingForm({ mode }) {
 
   const handleChange = (e) => {
     const { id, type, value, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [id]: type === "checkbox" ? checked : value,
-    }));
+    if (type === "radio" && checked) {
+      setFormData((prev) => ({
+        ...prev,
+        type: value,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [id]: type === "checkbox" ? checked : value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -185,19 +192,29 @@ export default function ListingForm({ mode }) {
           <div className="flex gap-6 flex-wrap">
             <div className="flex gap-2">
               <input
-                type="checkbox"
-                id="type"
+                type="radio"
+                id="rent"
+                name="listingType"
                 className="w-5"
-                onChange={() =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    type: prev.type === "rent" ? "sale" : "rent",
-                  }))
-                }
+                value="rent"
+                onChange={handleChange}
+                checked={formData.type === "rent"}
+              />
+              <label htmlFor="rent">Rent</label>
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="radio"
+                id="sale"
+                value="sale"
+                name="listingType"
+                className="w-5"
+                onChange={handleChange}
                 checked={formData.type === "sale"}
               />
-              <span>{formData.type === "sale" ? "Sale" : "Rent"}</span>
+              <label htmlFor="sale">Sale</label>
             </div>
+
             <div className="flex gap-2">
               <input
                 type="checkbox"
