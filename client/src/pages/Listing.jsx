@@ -16,7 +16,7 @@ import Contact from "../components/Contact";
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
   const [contact, setContact] = useState(false);
@@ -26,8 +26,10 @@ export default function Listing() {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        setLoading(true);
         const res = await fetch(`/api/listing/get/${params.listingId}`);
+        if (!res.ok) {
+          throw new Error("Network response was not ok.");
+        }
         const data = await res.json();
         if (data.success === false) {
           setError(true);
@@ -38,47 +40,49 @@ export default function Listing() {
         setLoading(false);
         setError(false);
       } catch (error) {
+        console.error("Fetch error:", error);
         setError(true);
         setLoading(false);
       }
     };
+
     fetchListing();
   }, [params.listingId]);
 
+  const handleShareClick = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
+  if (loading) {
+    return <p className="text-center my-7 text-2xl">Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center my-7 text-2xl">Something went wrong!</p>;
+  }
+
   return (
     <main>
-      {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
-      {error && (
-        <p className="text-center my-7 text-2xl">Something went wrong!</p>
-      )}
-      {listing && !loading && !error && (
+      {listing && (
         <div>
           <Swiper modules={[Navigation]} slidesPerView={1} navigation>
             {listing.imageUrls.map((url) => (
               <SwiperSlide key={url}>
                 <div
-                  className="h-[550px] w-full"
+                  className="h-[550px] w-full bg-cover bg-center"
                   style={{
                     backgroundImage: `url('${url}')`,
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
                   }}
                 ></div>
               </SwiperSlide>
             ))}
           </Swiper>
           <div className="fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
-            <FaShare
-              className="text-slate-500"
-              onClick={() => {
-                navigator.clipboard.writeText(window.location.href);
-                setCopied(true);
-                setTimeout(() => {
-                  setCopied(false);
-                }, 2000);
-              }}
-            />
+            <FaShare className="text-slate-500" onClick={handleShareClick} />
           </div>
           {copied && (
             <p className="fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-100 p-2">
@@ -87,7 +91,7 @@ export default function Listing() {
           )}
           <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
             <p className="text-2xl font-semibold">
-              {listing.name} - ${" "}
+              {listing.name} - $
               {listing.offer
                 ? listing.discountPrice.toLocaleString("en-US")
                 : listing.regularPrice.toLocaleString("en-US")}
@@ -112,23 +116,23 @@ export default function Listing() {
               {listing.description}
             </p>
             <ul className="text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6">
-              <li className="flex items-center gap-1 whitespace-nowrap ">
+              <li className="flex items-center gap-1 whitespace-nowrap">
                 <FaBed className="text-lg" />
                 {listing.bedrooms > 1
-                  ? `${listing.bedrooms} beds `
-                  : `${listing.bedrooms} bed `}
+                  ? `${listing.bedrooms} beds`
+                  : `${listing.bedrooms} bed`}
               </li>
-              <li className="flex items-center gap-1 whitespace-nowrap ">
+              <li className="flex items-center gap-1 whitespace-nowrap">
                 <FaBath className="text-lg" />
                 {listing.bathrooms > 1
-                  ? `${listing.bathrooms} baths `
-                  : `${listing.bathrooms} bath `}
+                  ? `${listing.bathrooms} baths`
+                  : `${listing.bathrooms} bath`}
               </li>
-              <li className="flex items-center gap-1 whitespace-nowrap ">
+              <li className="flex items-center gap-1 whitespace-nowrap">
                 <FaParking className="text-lg" />
                 {listing.parking ? "Parking spot" : "No Parking"}
               </li>
-              <li className="flex items-center gap-1 whitespace-nowrap ">
+              <li className="flex items-center gap-1 whitespace-nowrap">
                 <FaChair className="text-lg" />
                 {listing.furnished ? "Furnished" : "Unfurnished"}
               </li>

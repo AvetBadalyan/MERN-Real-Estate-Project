@@ -45,7 +45,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto text-center">
+      <div className="flex flex-col gap-6 p-28 px-0 max-w-6xl mx-auto text-center">
         <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
           Discover Your Perfect Home
           <br />
@@ -80,7 +80,7 @@ export default function Home() {
         ))}
       </Swiper>
 
-      <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10">
+      <div className="max-w-6xl mx-auto p-0 flex flex-col gap-8 my-10">
         {listings.offer.length > 0 && (
           <div>
             <div className="my-3">
