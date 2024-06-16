@@ -33,7 +33,6 @@ const AuthForm = ({ isSignUp }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form data before submission:", formData);
     const endpoint = isSignUp ? "/api/auth/signup" : "/api/auth/signin";
     dispatch(isSignUp ? signUpStart() : signInStart());
 
@@ -46,10 +45,8 @@ const AuthForm = ({ isSignUp }) => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log("Response data:", data);
 
       if (data.success === false) {
-        console.error("Sign in error:", data.message);
         dispatch(
           isSignUp ? signUpFailure(data.message) : signInFailure(data.message)
         );
