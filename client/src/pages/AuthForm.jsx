@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,6 +11,8 @@ import {
   signUpFailure,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const initialFormData = {
   username: "",
@@ -23,6 +25,12 @@ const AuthForm = ({ isSignUp }) => {
   const { error, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   const handleChange = (e) => {
     setFormData({
@@ -56,6 +64,13 @@ const AuthForm = ({ isSignUp }) => {
       dispatch(isSignUp ? signUpSuccess(data) : signInSuccess(data));
       setFormData(initialFormData); // Reset form data after success
       navigate("/");
+
+      // Success toast message
+      toast.success(
+        `Successfully ${isSignUp ? "signed up" : "signed in"}! Welcome ${
+          data.username || data.email
+        }`
+      );
     } catch (error) {
       dispatch(
         isSignUp ? signUpFailure(error.message) : signInFailure(error.message)
@@ -115,7 +130,6 @@ const AuthForm = ({ isSignUp }) => {
           {isSignUp ? "Sign in" : "Sign up"}
         </Link>
       </div>
-      {error && <p className="text-red-500 mt-5">{error}</p>}
     </div>
   );
 };

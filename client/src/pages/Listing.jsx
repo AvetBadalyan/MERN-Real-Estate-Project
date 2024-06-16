@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,6 +14,8 @@ import {
   FaShare,
 } from "react-icons/fa";
 import Contact from "../components/Contact";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
@@ -39,8 +42,12 @@ export default function Listing() {
         setListing(data);
         setLoading(false);
         setError(false);
+
+        // Success toast message when listing is fetched successfully
+        toast.success("Listing fetched successfully!");
       } catch (error) {
         console.error("Fetch error:", error);
+        toast.error("Failed to fetch listing. Please try again later.");
         setError(true);
         setLoading(false);
       }

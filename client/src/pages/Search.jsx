@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Search() {
   const navigate = useNavigate();
@@ -60,9 +62,13 @@ export default function Search() {
         const searchQuery = new URLSearchParams(params).toString();
         const res = await fetch(`/api/listing/get?${searchQuery}`);
         const data = await res.json();
+        if (data.length === 0) {
+          toast.info("No listings found!");
+        }
         setShowMore(data.length > 8);
         setListings(data);
       } catch (error) {
+        toast.error("Failed to fetch listings.");
         console.error("Failed to fetch listings:", error);
       } finally {
         setLoading(false);
@@ -114,7 +120,9 @@ export default function Search() {
       const data = await res.json();
       setShowMore(data.length >= 9);
       setListings((prevListings) => [...prevListings, ...data]);
+      toast.success("More listings loaded!");
     } catch (error) {
+      toast.error("Failed to fetch more listings.");
       console.error("Failed to fetch more listings:", error);
     }
   };
@@ -230,7 +238,7 @@ export default function Search() {
         </h1>
         <div className="p-7 flex flex-wrap gap-4">
           {!loading && listings.length === 0 && (
-            <p className="text-xl text-slate-700">No listing found!</p>
+            <p className="text-xl text-slate-700">No listings found!</p>
           )}
           {loading && (
             <p className="text-xl text-slate-700 text-center w-full">

@@ -9,6 +9,8 @@ import {
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ListingForm({ mode }) {
   const { currentUser } = useSelector((state) => state.user);
@@ -37,13 +39,18 @@ export default function ListingForm({ mode }) {
   useEffect(() => {
     if (mode === "update") {
       const fetchListing = async () => {
-        const res = await fetch(`/api/listing/get/${params.listingId}`);
-        const data = await res.json();
-        if (data.success === false) {
-          console.log(data.message);
-          return;
+        try {
+          const res = await fetch(`/api/listing/get/${params.listingId}`);
+          const data = await res.json();
+          if (data.success === false) {
+            toast.error(data.message);
+            return;
+          }
+          setFormData(data);
+        } catch (err) {
+          toast.error("An error occurred while fetching the listing data");
+          console.error(err);
         }
-        setFormData(data);
       };
       fetchListing();
     }
@@ -66,10 +73,12 @@ export default function ListingForm({ mode }) {
         .catch((err) => {
           console.log(err);
           setImageUploadError("Image upload failed (2 mb max per image)");
+          toast.error("Image upload failed (2 mb max per image)");
           setUploading(false);
         });
     } else {
       setImageUploadError("You can only upload 6 images per listing");
+      toast.error("You can only upload 6 images per listing");
       setUploading(false);
     }
   };
@@ -122,9 +131,11 @@ export default function ListingForm({ mode }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.imageUrls.length < 1) {
+      toast.error("You must upload at least one image");
       return setError("You must upload at least one image");
     }
     if (+formData.regularPrice < +formData.discountPrice) {
+      toast.error("Discount price must be lower than regular price");
       return setError("Discount price must be lower than regular price");
     }
     setLoading(true);
@@ -144,11 +155,14 @@ export default function ListingForm({ mode }) {
       const data = await res.json();
       setLoading(false);
       if (data.success === false) {
+        toast.error(data.message);
         setError(data.message);
         return;
       }
+      toast.success("Listing successfully submitted!");
       navigate(`/listing/${data._id}`);
     } catch (err) {
+      toast.error(err.message);
       setError(err.message);
       setLoading(false);
     }

@@ -5,6 +5,8 @@ import { Navigation } from "swiper/modules";
 import SwiperCore from "swiper";
 import "swiper/css/bundle";
 import ListingItem from "../components/ListingItem";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 SwiperCore.use([Navigation]);
 
@@ -37,6 +39,7 @@ export default function Home() {
         });
       } catch (error) {
         console.error("Failed to fetch listings:", error);
+        toast.error("Failed to fetch listings.");
       }
     };
 

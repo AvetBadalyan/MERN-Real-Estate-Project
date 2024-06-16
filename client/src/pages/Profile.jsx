@@ -17,10 +17,12 @@ import {
   signOutUserStart,
 } from "../redux/user/userSlice";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Profile() {
   const fileRef = useRef(null);
-  const { currentUser, loading, error } = useSelector((state) => state.user);
+  const { currentUser, loading } = useSelector((state) => state.user);
   const [file, setFile] = useState(null);
   const [filePercentage, setFilePercentage] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
@@ -51,12 +53,19 @@ export default function Profile() {
       },
       (error) => {
         setFileUploadError(true);
+        toast.error("Error uploading image (must be less than 2 MB)");
         console.error(error);
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setFormData((prev) => ({ ...prev, avatar: downloadURL }));
-        });
+        getDownloadURL(uploadTask.snapshot.ref)
+          .then((downloadURL) => {
+            setFormData((prev) => ({ ...prev, avatar: downloadURL }));
+            toast.success("Image successfully uploaded!");
+          })
+          .catch((error) => {
+            console.error("Error getting download URL:", error);
+            toast.error("Error getting download URL");
+          });
       }
     );
   };
@@ -80,12 +89,15 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
+        toast.error(data.message);
         return;
       }
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
+      toast.success("Profile updated successfully!");
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+      toast.error(error.message);
     }
   };
 
@@ -98,11 +110,14 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
+        toast.error(data.message);
         return;
       }
       dispatch(deleteUserSuccess(data));
+      toast.success("Account deleted successfully!");
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
+      toast.error(error.message);
     }
   };
 
@@ -113,11 +128,14 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
+        toast.error(data.message);
         return;
       }
       dispatch(deleteUserSuccess(data));
+      toast.success("Signed out successfully!");
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
+      toast.error(error.message);
     }
   };
 
@@ -128,11 +146,13 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         setShowListingsError(true);
+        toast.error("Error loading listings");
         return;
       }
       setUserListings(data);
     } catch (error) {
       setShowListingsError(true);
+      toast.error("Error loading listings");
     }
   };
 
@@ -149,7 +169,9 @@ export default function Profile() {
       setUserListings((prev) =>
         prev.filter((listing) => listing._id !== listingId)
       );
+      toast.success("Listing deleted successfully!");
     } catch (error) {
+      toast.error(error.message);
       console.error(error.message);
     }
   };
@@ -230,7 +252,7 @@ export default function Profile() {
           Sign out
         </span>
       </div>
-      {error && <p className="text-red-700 mt-5">{error}</p>}
+
       {updateSuccess && (
         <p className="text-green-700 mt-5">Profile updated successfully</p>
       )}

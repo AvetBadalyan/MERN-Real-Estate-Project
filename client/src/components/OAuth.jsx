@@ -3,11 +3,13 @@ import { app } from "../firebase";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signInSuccess } from "../redux/user/userSlice";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function OAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const handleGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -24,14 +26,17 @@ export default function OAuth() {
       });
 
       if (!res.ok) {
+        toast.error(`Server error: ${res.statusText}`);
         throw new Error(`Server error: ${res.statusText}`);
       }
 
       const data = await res.json();
       dispatch(signInSuccess(data));
+      toast.success("Successfully signed in with Google!");
       navigate("/");
     } catch (error) {
       console.error("Could not sign in with Google", error);
+      toast.error("Could not sign in with Google. Please try again later.");
     }
   };
 

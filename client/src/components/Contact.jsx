@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Contact({ listing }) {
   const [seller, setSeller] = useState(null);
@@ -17,6 +19,7 @@ export default function Contact({ listing }) {
       setSeller(data);
     } catch (error) {
       console.error("Error fetching seller:", error);
+      toast.error("Error fetching seller information. Please try again later.");
     }
   }, [listing.userRef]);
 
