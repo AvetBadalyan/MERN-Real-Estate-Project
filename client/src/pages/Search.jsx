@@ -120,7 +120,6 @@ export default function Search() {
       const data = await res.json();
       setShowMore(data.length >= 9);
       setListings((prevListings) => [...prevListings, ...data]);
-      toast.success("More listings loaded!");
     } catch (error) {
       toast.error("Failed to fetch more listings.");
       console.error("Failed to fetch more listings:", error);

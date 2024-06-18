@@ -25,11 +25,6 @@ export default function OAuth() {
         body: JSON.stringify({ name: displayName, email, photo: photoURL }),
       });
 
-      if (!res.ok) {
-        toast.error(`Server error: ${res.statusText}`);
-        throw new Error(`Server error: ${res.statusText}`);
-      }
-
       const data = await res.json();
       dispatch(signInSuccess(data));
       toast.success("Successfully signed in with Google!");

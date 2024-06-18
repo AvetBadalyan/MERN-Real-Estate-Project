@@ -43,7 +43,7 @@ export default function ListingForm({ mode }) {
           const res = await fetch(`/api/listing/get/${params.listingId}`);
           const data = await res.json();
           if (data.success === false) {
-            toast.error(data.message);
+            console.error(data.message);
             return;
           }
           setFormData(data);
@@ -78,7 +78,7 @@ export default function ListingForm({ mode }) {
         });
     } else {
       setImageUploadError("You can only upload 6 images per listing");
-      toast.error("You can only upload 6 images per listing");
+      toast.error("You can only upload up to 6 images per listing");
       setUploading(false);
     }
   };
@@ -155,7 +155,7 @@ export default function ListingForm({ mode }) {
       const data = await res.json();
       setLoading(false);
       if (data.success === false) {
-        toast.error(data.message);
+        console.error(data.message);
         setError(data.message);
         return;
       }

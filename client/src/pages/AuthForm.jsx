@@ -62,10 +62,9 @@ const AuthForm = ({ isSignUp }) => {
       }
 
       dispatch(isSignUp ? signUpSuccess(data) : signInSuccess(data));
-      setFormData(initialFormData); // Reset form data after success
+      setFormData(initialFormData);
       navigate("/");
 
-      // Success toast message
       toast.success(
         `Successfully ${isSignUp ? "signed up" : "signed in"}! Welcome ${
           data.username || data.email

@@ -43,11 +43,10 @@ export default function Listing() {
         setLoading(false);
         setError(false);
 
-        // Success toast message when listing is fetched successfully
         toast.success("Listing fetched successfully!");
       } catch (error) {
         console.error("Fetch error:", error);
-        toast.error("Failed to fetch listing. Please try again later.");
+        toast.error("Failed to fetch listing.");
         setError(true);
         setLoading(false);
       }

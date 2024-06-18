@@ -1,5 +1,5 @@
-import { useSelector, useDispatch } from "react-redux";
 import { useRef, useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
@@ -19,6 +19,7 @@ import {
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -30,6 +31,8 @@ export default function Profile() {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [confirmationAction, setConfirmationAction] = useState(() => () => {});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -101,24 +104,31 @@ export default function Profile() {
     }
   };
 
+  const confirmAndExecute = (action) => {
+    setConfirmationAction(() => action);
+    setModalOpen(true);
+  };
+
   const handleDeleteUser = async () => {
-    dispatch(deleteUserStart());
-    try {
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(deleteUserFailure(data.message));
-        toast.error(data.message);
-        return;
+    confirmAndExecute(async () => {
+      dispatch(deleteUserStart());
+      try {
+        const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+          method: "DELETE",
+        });
+        const data = await res.json();
+        if (data.success === false) {
+          dispatch(deleteUserFailure(data.message));
+          toast.error(data.message);
+          return;
+        }
+        dispatch(deleteUserSuccess(data));
+        toast.success("Account deleted successfully!");
+      } catch (error) {
+        dispatch(deleteUserFailure(error.message));
+        toast.error(error.message);
       }
-      dispatch(deleteUserSuccess(data));
-      toast.success("Account deleted successfully!");
-    } catch (error) {
-      dispatch(deleteUserFailure(error.message));
-      toast.error(error.message);
-    }
+    });
   };
 
   const handleSignOut = async () => {
@@ -128,7 +138,7 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
-        toast.error(data.message);
+        console.error(data.message);
         return;
       }
       dispatch(deleteUserSuccess(data));
@@ -146,7 +156,6 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         setShowListingsError(true);
-        toast.error("Error loading listings");
         return;
       }
       setUserListings(data);
@@ -157,23 +166,25 @@ export default function Profile() {
   };
 
   const handleListingDelete = async (listingId) => {
-    try {
-      const res = await fetch(`/api/listing/delete/${listingId}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      if (data.success === false) {
-        console.error(data.message);
-        return;
+    confirmAndExecute(async () => {
+      try {
+        const res = await fetch(`/api/listing/delete/${listingId}`, {
+          method: "DELETE",
+        });
+        const data = await res.json();
+        if (data.success === false) {
+          console.error(data.message);
+          return;
+        }
+        setUserListings((prev) =>
+          prev.filter((listing) => listing._id !== listingId)
+        );
+        toast.success("Listing deleted successfully!");
+      } catch (error) {
+        toast.error(error.message);
+        console.error(error.message);
       }
-      setUserListings((prev) =>
-        prev.filter((listing) => listing._id !== listingId)
-      );
-      toast.success("Listing deleted successfully!");
-    } catch (error) {
-      toast.error(error.message);
-      console.error(error.message);
-    }
+    });
   };
 
   return (
@@ -284,7 +295,7 @@ export default function Profile() {
                 />
               </Link>
               <Link
-                className="text-slate-700 font-semibold  hover:underline truncate flex-1"
+                className="text-slate-700 font-semibold hover:underline truncate flex-1"
                 to={`/listing/${listing._id}`}
               >
                 <p>{listing.name}</p>
@@ -305,6 +316,13 @@ export default function Profile() {
           ))}
         </div>
       )}
+
+      <ConfirmationModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={confirmationAction}
+        message="Are you sure you want to proceed?"
+      />
     </div>
   );
 }
