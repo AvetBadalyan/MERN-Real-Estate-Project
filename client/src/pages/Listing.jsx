@@ -16,6 +16,7 @@ import {
 import Contact from "../components/Contact";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getLocalImageUrl } from "../utils/images";
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
@@ -81,7 +82,7 @@ export default function Listing() {
                 <div
                   className="h-[550px] w-full bg-cover bg-center"
                   style={{
-                    backgroundImage: `url('${url}')`,
+                    backgroundImage: `url('${getLocalImageUrl(url)}')`,
                   }}
                 ></div>
               </SwiperSlide>

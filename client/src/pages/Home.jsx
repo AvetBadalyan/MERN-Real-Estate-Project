@@ -7,6 +7,7 @@ import "swiper/css/bundle";
 import ListingItem from "../components/ListingItem";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getLocalImageUrl } from "../utils/images";
 
 SwiperCore.use([Navigation]);
 
@@ -74,7 +75,7 @@ export default function Home() {
           <SwiperSlide key={listing._id}>
             <div
               style={{
-                background: `url('${listing.imageUrls[0]}') center no-repeat`,
+                background: `url('${getLocalImageUrl(listing.imageUrls[0])}') center no-repeat`,
                 backgroundSize: "cover",
               }}
               className="h-[500px]"

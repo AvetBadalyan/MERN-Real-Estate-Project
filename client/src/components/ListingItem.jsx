@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
+import { getLocalImageUrl } from "../utils/images";
 
 export default function ListingItem({ listing }) {
   const {
@@ -17,9 +18,7 @@ export default function ListingItem({ listing }) {
     bathrooms,
   } = listing;
 
-  const listingImage =
-    imageUrls[0] ||
-    "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.jpg?width=595&height=400&name=real-estate-business-compressor.jpg";
+  const listingImage = getLocalImageUrl(imageUrls[0]);
 
   const price = offer ? discountPrice : regularPrice;
   const formattedPrice = price.toLocaleString("en-US");

@@ -1,13 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
-import { app } from "../firebase";
-import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
@@ -20,6 +13,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ConfirmationModal from "../components/ConfirmationModal";
+import { getLocalImageUrl } from "../utils/images";
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -41,36 +35,32 @@ export default function Profile() {
     }
   }, [file]);
 
-  const handleFileUpload = (file) => {
-    const storage = getStorage(app);
-    const fileName = `${Date.now()}_${file.name}`;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  const handleFileUpload = async (file) => {
+    try {
+      setFileUploadError(false);
+      setFilePercentage(10);
+      const data = new FormData();
+      data.append("image", file);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setFilePercentage(Math.round(progress));
-      },
-      (error) => {
-        setFileUploadError(true);
-        toast.error("Error uploading image (must be less than 2 MB)");
-        console.error(error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref)
-          .then((downloadURL) => {
-            setFormData((prev) => ({ ...prev, avatar: downloadURL }));
-            toast.success("Image successfully uploaded!");
-          })
-          .catch((error) => {
-            console.error("Error getting download URL:", error);
-            toast.error("Error getting download URL");
-          });
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: data,
+      });
+      const result = await res.json();
+
+      if (!res.ok || result.success === false) {
+        throw new Error(result.message || "Error uploading image");
       }
-    );
+
+      setFormData((prev) => ({ ...prev, avatar: result.imageUrl }));
+      setFilePercentage(100);
+      toast.success("Image successfully uploaded!");
+    } catch (error) {
+      setFileUploadError(true);
+      setFilePercentage(0);
+      toast.error("Error uploading image (must be less than 2 MB)");
+      console.error(error);
+    }
   };
 
   const handleChange = (e) => {
@@ -199,7 +189,7 @@ export default function Profile() {
           onChange={(e) => setFile(e.target.files[0])}
         />
         <img
-          src={formData.avatar || currentUser.avatar}
+          src={getLocalImageUrl(formData.avatar || currentUser.avatar, currentUser.avatar)}
           alt="profile"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
           onClick={() => fileRef.current.click()}
@@ -289,7 +279,7 @@ export default function Profile() {
             >
               <Link to={`/listing/${listing._id}`}>
                 <img
-                  src={listing.imageUrls[0]}
+                  src={getLocalImageUrl(listing.imageUrls[0])}
                   alt="listing cover"
                   className="h-16 w-16 object-contain"
                 />
