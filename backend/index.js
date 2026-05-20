@@ -22,6 +22,8 @@ mongoose
 
 const __dirname = path.resolve();
 const imagesDir = path.join(__dirname, 'images');
+const maxImageSizeMb = 5;
+const port = process.env.PORT || 3000;
 fs.mkdirSync(imagesDir, { recursive: true });
 
 const imageStorage = multer.diskStorage({
@@ -36,7 +38,7 @@ const imageStorage = multer.diskStorage({
 
 const uploadImage = multer({
   storage: imageStorage,
-  limits: { fileSize: 2 * 1024 * 1024 },
+  limits: { fileSize: maxImageSizeMb * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (!file.mimetype.startsWith('image/')) {
       return cb(new Error('Only image files are allowed'));
@@ -56,7 +58,18 @@ app.use('/images', express.static(imagesDir));
 app.post(
   '/api/upload',
   verifyToken,
-  uploadImage.single('image'),
+  (req, res, next) => {
+    uploadImage.single('image')(req, res, (error) => {
+      if (error) {
+        const message =
+          error.code === 'LIMIT_FILE_SIZE'
+            ? `Image must be less than ${maxImageSizeMb} MB`
+            : error.message;
+        return res.status(400).json({ success: false, message });
+      }
+      next();
+    });
+  },
   (req, res) => {
     if (!req.file) {
       return res
@@ -68,13 +81,13 @@ app.post(
   },
 );
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000!');
-});
-
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
+
+app.use('/api', (req, res) => {
+  res.status(404).json({ success: false, message: 'API route not found' });
+});
 
 app.use(express.static(path.join(__dirname, '/client/dist')));
 
@@ -90,4 +103,8 @@ app.use((err, req, res, next) => {
     statusCode,
     message,
   });
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}!`);
 });

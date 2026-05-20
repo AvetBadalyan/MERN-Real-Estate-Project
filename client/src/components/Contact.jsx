@@ -16,6 +16,9 @@ export default function Contact({ listing }) {
     try {
       const res = await fetch(`/api/user/${listing.userRef}`);
       const data = await res.json();
+      if (!res.ok || data.success === false) {
+        throw new Error(data.message || "Error fetching seller information");
+      }
       setSeller(data);
     } catch (error) {
       console.error("Error fetching seller:", error);
@@ -30,6 +33,9 @@ export default function Contact({ listing }) {
   if (!seller) {
     return null;
   }
+
+  const subject = encodeURIComponent(`Regarding ${listing.name}`);
+  const body = encodeURIComponent(message);
 
   return (
     <div className="flex flex-col gap-2">
@@ -47,7 +53,7 @@ export default function Contact({ listing }) {
         className="w-full border p-3 rounded-lg"
       ></textarea>
       <Link
-        to={`mailto:${seller.email}?subject=Regarding ${listing.name}&body=${message}`}
+        to={`mailto:${seller.email}?subject=${subject}&body=${body}`}
         className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
       >
         Send Message

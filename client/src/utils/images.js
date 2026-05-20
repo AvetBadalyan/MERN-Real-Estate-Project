@@ -1,4 +1,5 @@
 const FALLBACK_LISTING_IMAGE = "/images/1718130801032_hero-real-estate-facts-trends.jpeg";
+export const FALLBACK_AVATAR_IMAGE = "/images/default-avatar.svg";
 
 export const getLocalImageUrl = (imageUrl, fallback = FALLBACK_LISTING_IMAGE) => {
   if (!imageUrl) {
@@ -21,3 +22,6 @@ export const getLocalImageUrl = (imageUrl, fallback = FALLBACK_LISTING_IMAGE) =>
 
   return imageUrl;
 };
+
+export const getAvatarImageUrl = (imageUrl) =>
+  getLocalImageUrl(imageUrl, FALLBACK_AVATAR_IMAGE);

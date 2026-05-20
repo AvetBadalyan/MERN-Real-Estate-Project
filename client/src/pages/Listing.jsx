@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -30,7 +29,7 @@ export default function Listing() {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const res = await fetch(`/api/listing/get/${params.listingId}`);
+        const res = await fetch(`/api/listing/${params.listingId}`);
         if (!res.ok) {
           throw new Error("Network response was not ok.");
         }
@@ -43,8 +42,6 @@ export default function Listing() {
         setListing(data);
         setLoading(false);
         setError(false);
-
-        toast.success("Listing fetched successfully!");
       } catch (error) {
         console.error("Fetch error:", error);
         toast.error("Failed to fetch listing.");

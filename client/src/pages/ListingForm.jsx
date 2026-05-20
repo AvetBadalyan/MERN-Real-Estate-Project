@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getLocalImageUrl } from "../utils/images";
+import { uploadImage } from "../utils/uploadImage";
 
 export default function ListingForm({ mode }) {
   const { currentUser } = useSelector((state) => state.user);
@@ -34,7 +35,7 @@ export default function ListingForm({ mode }) {
     if (mode === "update") {
       const fetchListing = async () => {
         try {
-          const res = await fetch(`/api/listing/get/${params.listingId}`);
+          const res = await fetch(`/api/listing/${params.listingId}`);
           const data = await res.json();
           if (data.success === false) {
             console.error(data.message);
@@ -54,7 +55,7 @@ export default function ListingForm({ mode }) {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
       setImageUploadError(false);
-      const promises = Array.from(files).map((file) => storeImage(file));
+      const promises = Array.from(files).map((file) => uploadImage(file));
 
       Promise.all(promises)
         .then((urls) => {
@@ -65,9 +66,10 @@ export default function ListingForm({ mode }) {
           setUploading(false);
         })
         .catch((err) => {
-          console.log(err);
-          setImageUploadError("Image upload failed (2 MB max per image)");
-          toast.error("Image upload failed (2 MB max per image)");
+          console.error(err);
+          const message = err.message || "Image upload failed";
+          setImageUploadError(message);
+          toast.error(message);
           setUploading(false);
         });
     } else {
@@ -75,23 +77,6 @@ export default function ListingForm({ mode }) {
       toast.error("You can only upload up to 6 images per listing");
       setUploading(false);
     }
-  };
-
-  const storeImage = async (file) => {
-    const data = new FormData();
-    data.append("image", file);
-
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: data,
-    });
-    const result = await res.json();
-
-    if (!res.ok || result.success === false) {
-      throw new Error(result.message || "Image upload failed");
-    }
-
-    return result.imageUrl;
   };
 
   const handleRemoveImage = (index) => {
@@ -131,10 +116,10 @@ export default function ListingForm({ mode }) {
     try {
       const endpoint =
         mode === "create"
-          ? "/api/listing/create"
-          : `/api/listing/update/${params.listingId}`;
+          ? "/api/listing"
+          : `/api/listing/${params.listingId}`;
       const res = await fetch(endpoint, {
-        method: "POST",
+        method: mode === "create" ? "POST" : "PUT",
         headers: {
           "Content-Type": "application/json",
         },

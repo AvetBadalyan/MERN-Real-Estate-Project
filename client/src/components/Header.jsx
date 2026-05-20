@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { FALLBACK_AVATAR_IMAGE, getAvatarImageUrl } from "../utils/images";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
@@ -56,8 +57,11 @@ export default function Header() {
               {currentUser ? (
                 <img
                   className="rounded-full h-7 w-7 object-cover"
-                  src={currentUser.avatar}
+                  src={getAvatarImageUrl(currentUser.avatar)}
                   alt="profile"
+                  onError={(e) => {
+                    e.currentTarget.src = FALLBACK_AVATAR_IMAGE;
+                  }}
                 />
               ) : (
                 "Sign in"

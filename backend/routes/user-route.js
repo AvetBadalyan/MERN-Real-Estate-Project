@@ -3,17 +3,15 @@ import {
   deleteUser,
   getUser,
   getUserListings,
-  test,
   updateUser,
 } from "../controllers/user-controller.js";
 import { verifyToken } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
-router.get("/test", test);
-router.post("/update/:id", verifyToken, updateUser);
-router.delete("/delete/:id", verifyToken, deleteUser);
-router.get("/listings/:id", verifyToken, getUserListings);
-router.get("/:id", verifyToken, getUser);
+router.get("/listings/:id([0-9a-fA-F]{24})", verifyToken, getUserListings);
+router.put("/:id([0-9a-fA-F]{24})", verifyToken, updateUser);
+router.delete("/:id([0-9a-fA-F]{24})", verifyToken, deleteUser);
+router.get("/:id([0-9a-fA-F]{24})", verifyToken, getUser);
 
 export default router;

@@ -8,12 +8,19 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   signOutUserStart,
+  signOutUserSuccess,
+  signOutUserFailure,
 } from "../redux/user/userSlice";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ConfirmationModal from "../components/ConfirmationModal";
-import { getLocalImageUrl } from "../utils/images";
+import {
+  FALLBACK_AVATAR_IMAGE,
+  getAvatarImageUrl,
+  getLocalImageUrl,
+} from "../utils/images";
+import { uploadImage } from "../utils/uploadImage";
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -39,26 +46,14 @@ export default function Profile() {
     try {
       setFileUploadError(false);
       setFilePercentage(10);
-      const data = new FormData();
-      data.append("image", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: data,
-      });
-      const result = await res.json();
-
-      if (!res.ok || result.success === false) {
-        throw new Error(result.message || "Error uploading image");
-      }
-
-      setFormData((prev) => ({ ...prev, avatar: result.imageUrl }));
+      const imageUrl = await uploadImage(file);
+      setFormData((prev) => ({ ...prev, avatar: imageUrl }));
       setFilePercentage(100);
       toast.success("Image successfully uploaded!");
     } catch (error) {
-      setFileUploadError(true);
+      setFileUploadError(error.message || "Error uploading image");
       setFilePercentage(0);
-      toast.error("Error uploading image (must be less than 2 MB)");
+      toast.error(error.message || "Error uploading image");
       console.error(error);
     }
   };
@@ -72,8 +67,8 @@ export default function Profile() {
     e.preventDefault();
     dispatch(updateUserStart());
     try {
-      const res = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: "POST",
+      const res = await fetch(`/api/user/${currentUser._id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -103,7 +98,7 @@ export default function Profile() {
     confirmAndExecute(async () => {
       dispatch(deleteUserStart());
       try {
-        const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        const res = await fetch(`/api/user/${currentUser._id}`, {
           method: "DELETE",
         });
         const data = await res.json();
@@ -127,14 +122,14 @@ export default function Profile() {
       const res = await fetch("/api/auth/signout");
       const data = await res.json();
       if (data.success === false) {
-        dispatch(deleteUserFailure(data.message));
+        dispatch(signOutUserFailure(data.message));
         console.error(data.message);
         return;
       }
-      dispatch(deleteUserSuccess(data));
+      dispatch(signOutUserSuccess());
       toast.success("Signed out successfully!");
     } catch (error) {
-      dispatch(deleteUserFailure(error.message));
+      dispatch(signOutUserFailure(error.message));
       toast.error(error.message);
     }
   };
@@ -158,7 +153,7 @@ export default function Profile() {
   const handleListingDelete = async (listingId) => {
     confirmAndExecute(async () => {
       try {
-        const res = await fetch(`/api/listing/delete/${listingId}`, {
+        const res = await fetch(`/api/listing/${listingId}`, {
           method: "DELETE",
         });
         const data = await res.json();
@@ -189,15 +184,18 @@ export default function Profile() {
           onChange={(e) => setFile(e.target.files[0])}
         />
         <img
-          src={getLocalImageUrl(formData.avatar || currentUser.avatar, currentUser.avatar)}
+          src={getAvatarImageUrl(formData.avatar || currentUser.avatar)}
           alt="profile"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
           onClick={() => fileRef.current.click()}
+          onError={(e) => {
+            e.currentTarget.src = FALLBACK_AVATAR_IMAGE;
+          }}
         />
         <p className="text-sm self-center">
           {fileUploadError ? (
             <span className="text-red-700">
-              Error uploading image (must be less than 2 MB)
+              {fileUploadError}
             </span>
           ) : filePercentage > 0 && filePercentage < 100 ? (
             <span className="text-slate-700">Uploading {filePercentage}%</span>
@@ -291,7 +289,7 @@ export default function Profile() {
                 <p>{listing.name}</p>
               </Link>
 
-              <div className="flex flex-col item-center">
+              <div className="flex flex-col items-center">
                 <button
                   onClick={() => handleListingDelete(listing._id)}
                   className="text-red-700 uppercase"

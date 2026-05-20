@@ -60,7 +60,7 @@ export default function Search() {
       setShowMore(false);
       try {
         const searchQuery = new URLSearchParams(params).toString();
-        const res = await fetch(`/api/listing/get?${searchQuery}`);
+        const res = await fetch(`/api/listing?${searchQuery}`);
         const data = await res.json();
         if (data.length === 0) {
           toast.info("No listings found!");
@@ -116,7 +116,7 @@ export default function Search() {
     urlParams.set("startIndex", startIndex);
 
     try {
-      const res = await fetch(`/api/listing/get?${urlParams.toString()}`);
+      const res = await fetch(`/api/listing?${urlParams.toString()}`);
       const data = await res.json();
       setShowMore(data.length >= 9);
       setListings((prevListings) => [...prevListings, ...data]);
