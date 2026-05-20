@@ -78,8 +78,8 @@ const AuthForm = ({ isSignUp }) => {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-7">
+    <div className="px-4 py-6 sm:px-6 max-w-lg mx-auto">
+      <h1 className="text-3xl text-center font-semibold mb-6">
         {isSignUp ? "Sign Up" : "Sign In"}
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -121,11 +121,11 @@ const AuthForm = ({ isSignUp }) => {
         </button>
         <OAuth />
       </form>
-      <div className="flex gap-2 mt-5">
+      <div className="flex flex-wrap gap-2 mt-4">
         <p>
           {isSignUp ? "Already have an account?" : "Don't have an account?"}
         </p>
-        <Link to={isSignUp ? "/sign-in" : "/sign-up"} className="text-blue-700">
+        <Link to={isSignUp ? "/sign-in" : "/sign-up"} className="text-amber-700">
           {isSignUp ? "Sign in" : "Sign up"}
         </Link>
       </div>

@@ -173,8 +173,8 @@ export default function Profile() {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
+    <div className="px-4 py-6 sm:px-6 max-w-lg mx-auto">
+      <h1 className="text-3xl font-semibold text-center mb-6">Profile</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="file"
@@ -200,7 +200,7 @@ export default function Profile() {
           ) : filePercentage > 0 && filePercentage < 100 ? (
             <span className="text-slate-700">Uploading {filePercentage}%</span>
           ) : filePercentage === 100 ? (
-            <span className="text-green-700">Image successfully uploaded!</span>
+            <span className="text-amber-700">Image successfully uploaded!</span>
           ) : null}
         </p>
         <input
@@ -235,51 +235,51 @@ export default function Profile() {
         </button>
         <Link
           to="/create-listing"
-          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
+          className="bg-amber-600 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
         >
           Create Listing
         </Link>
       </form>
-      <div className="flex justify-between mt-5">
+      <div className="flex justify-between mt-4">
         <span
           onClick={handleDeleteUser}
-          className="text-red-700 cursor-pointer"
+          className="text-red-700 cursor-pointer hover:underline"
         >
           Delete account
         </span>
-        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer hover:underline">
           Sign out
         </span>
       </div>
 
       {updateSuccess && (
-        <p className="text-green-700 mt-5">Profile updated successfully</p>
+        <p className="text-amber-700 mt-4">Profile updated successfully</p>
       )}
       <button
-        className="bg-green-700 w-full text-white rounded-lg p-3 uppercase text-center hover:opacity-95 mt-5"
+        className="bg-amber-600 w-full text-white rounded-lg p-3 uppercase text-center hover:opacity-95 mt-4"
         onClick={handleShowListings}
       >
         Show Listings
       </button>
       {showListingsError && (
-        <p className="text-red-700 mt-5">Error loading listings</p>
+        <p className="text-red-700 mt-4">Error loading listings</p>
       )}
 
       {userListings && userListings.length > 0 && (
         <div className="flex flex-col gap-4">
-          <h1 className="text-center mt-7 text-2xl font-semibold">
+          <h1 className="text-center mt-6 text-2xl font-semibold">
             Your Listings
           </h1>
           {userListings.map((listing) => (
             <div
               key={listing._id}
-              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+              className="border rounded-lg p-3 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center sm:gap-4"
             >
-              <Link to={`/listing/${listing._id}`}>
+              <Link to={`/listing/${listing._id}`} className="w-full sm:w-auto">
                 <img
                   src={getLocalImageUrl(listing.imageUrls[0])}
                   alt="listing cover"
-                  className="h-16 w-16 object-contain"
+                  className="h-28 w-full rounded-md object-cover sm:h-16 sm:w-16 sm:object-contain"
                 />
               </Link>
               <Link
@@ -289,15 +289,15 @@ export default function Profile() {
                 <p>{listing.name}</p>
               </Link>
 
-              <div className="flex flex-col items-center">
+              <div className="flex w-full justify-between sm:w-auto sm:flex-col sm:items-center">
                 <button
                   onClick={() => handleListingDelete(listing._id)}
-                  className="text-red-700 uppercase"
+                  className="text-red-700 uppercase hover:underline"
                 >
                   Delete
                 </button>
                 <Link to={`/update-listing/${listing._id}`}>
-                  <button className="text-green-700 uppercase">Edit</button>
+                  <button className="text-amber-700 uppercase hover:underline">Edit</button>
                 </Link>
               </div>
             </div>

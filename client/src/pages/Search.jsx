@@ -128,10 +128,10 @@ export default function Search() {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-          <div className="flex items-center gap-2">
-            <label className="whitespace-nowrap font-semibold">
+      <div className="px-4 py-6 sm:px-6 border-b-2 md:border-r-2 md:min-h-screen md:w-80 lg:w-96">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <label className="font-semibold sm:whitespace-nowrap">
               Search Term:
             </label>
             <input
@@ -143,50 +143,52 @@ export default function Search() {
               onChange={handleChange}
             />
           </div>
-          <div className="flex gap-2 flex-wrap items-center">
+          <div className="flex flex-col gap-3">
             <label className="font-semibold">Type:</label>
-            <div className="flex gap-2">
-              <input
-                type="radio"
-                name="type"
-                id="all"
-                className="w-5"
-                onChange={handleChange}
-                checked={sidebardata.type === "all"}
-              />
-              <span>Rent & Sale</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="radio"
-                name="type"
-                id="rent"
-                className="w-5"
-                onChange={handleChange}
-                checked={sidebardata.type === "rent"}
-              />
-              <span>Rent</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="radio"
-                name="type"
-                id="sale"
-                className="w-5"
-                onChange={handleChange}
-                checked={sidebardata.type === "sale"}
-              />
-              <span>Sale</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="offer"
-                className="w-5"
-                onChange={handleChange}
-                checked={sidebardata.offer}
-              />
-              <span>Offer</span>
+            <div className="flex flex-wrap gap-3">
+              <div className="flex gap-2">
+                <input
+                  type="radio"
+                  name="type"
+                  id="all"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebardata.type === "all"}
+                />
+                <span>Rent & Sale</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="radio"
+                  name="type"
+                  id="rent"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebardata.type === "rent"}
+                />
+                <span>Rent</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="radio"
+                  name="type"
+                  id="sale"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebardata.type === "sale"}
+                />
+                <span>Sale</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="offer"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebardata.offer}
+                />
+                <span>Offer</span>
+              </div>
             </div>
           </div>
           <div className="flex gap-2 flex-wrap items-center">
@@ -212,13 +214,13 @@ export default function Search() {
               <span>Furnished</span>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <label className="font-semibold">Sort:</label>
             <select
               onChange={handleChange}
               value={`${sidebardata.sort}_${sidebardata.order}`}
               id="sort_order"
-              className="border rounded-lg p-3"
+              className="border rounded-lg p-3 w-full sm:w-auto"
             >
               <option value="regularPrice_desc">Price high to low</option>
               <option value="regularPrice_asc">Price low to high</option>
@@ -226,16 +228,16 @@ export default function Search() {
               <option value="createdAt_asc">Oldest</option>
             </select>
           </div>
-          <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95">
+          <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:bg-slate-800">
             Search
           </button>
         </form>
       </div>
       <div className="flex-1">
-        <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
+        <h1 className="text-2xl sm:text-3xl font-semibold border-b px-4 py-4 sm:px-6 text-slate-700 mt-4">
           Listing results:
         </h1>
-        <div className="p-7 flex flex-wrap gap-4">
+        <div className="px-4 py-6 sm:px-6 flex flex-wrap gap-4">
           {!loading && listings.length === 0 && (
             <p className="text-xl text-slate-700">No listings found!</p>
           )}

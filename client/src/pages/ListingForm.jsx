@@ -142,8 +142,8 @@ export default function ListingForm({ mode }) {
   };
 
   return (
-    <main className="p-3 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7">
+    <main className="px-4 py-6 sm:px-6 max-w-6xl mx-auto">
+      <h1 className="text-3xl font-semibold text-center mb-6">
         {mode === "create" ? "Create" : "Update"} a Listing
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
@@ -176,7 +176,7 @@ export default function ListingForm({ mode }) {
             onChange={handleChange}
             value={formData.address}
           />
-          <div className="flex gap-6 flex-wrap">
+          <div className="flex gap-3 flex-wrap">
             <div className="flex gap-2">
               <input
                 type="radio"
@@ -303,8 +303,8 @@ export default function ListingForm({ mode }) {
           </div>
         </div>
         <div className="flex flex-col gap-4 flex-1">
-          <div className="relative border p-3 rounded-lg h-80 overflow-y-auto">
-            <div className="grid grid-cols-3 gap-3">
+          <div className="relative border p-3 rounded-lg h-64 sm:h-80 overflow-y-auto">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {formData.imageUrls.map((url, i) => (
                 <div key={i} className="relative">
                   <img
@@ -322,17 +322,17 @@ export default function ListingForm({ mode }) {
                 </div>
               ))}
               {formData.imageUrls.length < 6 && (
-                <div>
+                <div className="col-span-2 sm:col-span-1">
                   <input
                     type="file"
-                    className="border p-3 rounded-lg"
+                    className="w-full border p-3 rounded-lg text-sm"
                     multiple
                     accept="image/*"
                     onChange={(e) => setFiles(e.target.files)}
                   />
                   <button
                     type="button"
-                    className="p-3 mt-2 bg-blue-700 text-white rounded-lg uppercase hover:opacity-95"
+                    className="w-full p-3 mt-2 bg-amber-600 text-white rounded-lg uppercase hover:opacity-95"
                     onClick={handleImageSubmit}
                   >
                     {uploading ? "Uploading..." : "Upload Images"}

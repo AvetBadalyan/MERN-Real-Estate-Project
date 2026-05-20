@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
 import { getLocalImageUrl } from "../utils/images";
 
-export default function ListingItem({ listing }) {
+export default function ListingItem({ listing, className = "w-full sm:w-[330px]" }) {
   const {
     _id,
     imageUrls,
@@ -25,19 +25,21 @@ export default function ListingItem({ listing }) {
   const rentSuffix = type === "rent" ? " / month" : "";
 
   return (
-    <div className="bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]">
+    <div
+      className={`overflow-hidden rounded-md bg-white shadow-md transition hover:-translate-y-1 hover:shadow-xl ${className}`}
+    >
       <Link to={`/listing/${_id}`}>
         <img
           src={listingImage}
           alt="listing cover"
-          className="h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300"
+          className="h-[320px] w-full object-cover transition duration-300 hover:scale-105 sm:h-[220px]"
         />
-        <div className="p-3 flex flex-col gap-2 w-full">
+        <div className="p-4 flex flex-col gap-2 w-full">
           <p className="truncate text-lg font-semibold text-slate-700">
             {name}
           </p>
           <div className="flex items-center gap-1">
-            <MdLocationOn className="h-4 w-4 text-green-700" />
+            <MdLocationOn className="h-4 w-4 text-amber-600" />
             <p className="text-sm text-gray-600 truncate w-full">{address}</p>
           </div>
           <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
