@@ -250,15 +250,17 @@ export default function Search() {
 						listings.map(listing => (
 							<ListingItem key={listing._id} listing={listing} />
 						))}
-					{showMore && (
+				</div>
+				{showMore && (
+					<div className="py-8 flex justify-center">
 						<button
 							onClick={onShowMoreClick}
-							className="w-full p-2 bg-gray-200 hover:bg-gray-300 transition-all ease-in-out"
+							className="rounded-lg bg-slate-700 px-6 py-2 text-white transition hover:bg-slate-800"
 						>
 							Show more
 						</button>
-					)}
-				</div>
+					</div>
+				)}
 			</div>
 		</div>
 	)

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import {
 	FaArrowRight,
+	FaGem,
 	FaHome,
 	FaKey,
 	FaMapMarkerAlt,
-	FaSearch,
 } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -23,7 +23,7 @@ const heroImage =
 const quickLinks = [
 	{ label: 'Buy', to: '/search?type=sale', icon: FaHome },
 	{ label: 'Rent', to: '/search?type=rent', icon: FaKey },
-	{ label: 'Explore all', to: '/search', icon: FaSearch },
+	{ label: 'Premium', to: '/search?premium=true', icon: FaGem },
 ]
 
 const featureCards = [

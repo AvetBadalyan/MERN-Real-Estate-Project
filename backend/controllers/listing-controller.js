@@ -68,7 +68,9 @@ export const getListings = async (req, res, next) => {
 		const startIndex = parseInt(req.query.startIndex) || 0
 		let offer = req.query.offer
 
-		if (offer === undefined || offer === 'false') {
+		if (offer === 'true') {
+			offer = true
+		} else if (offer === undefined || offer === 'false') {
 			offer = { $in: [false, true] }
 		}
 
@@ -82,6 +84,14 @@ export const getListings = async (req, res, next) => {
 
 		if (parking === undefined || parking === 'false') {
 			parking = { $in: [false, true] }
+		}
+
+		let premium = req.query.premium
+
+		if (premium === 'true') {
+			premium = true
+		} else if (premium === undefined || premium === 'false') {
+			premium = { $in: [false, true] }
 		}
 
 		let type = req.query.type
@@ -101,6 +111,7 @@ export const getListings = async (req, res, next) => {
 			offer,
 			furnished,
 			parking,
+			premium,
 			type,
 		})
 			.sort({ [sort]: order })

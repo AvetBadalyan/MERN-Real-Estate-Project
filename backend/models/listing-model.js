@@ -56,6 +56,10 @@ const listingSchema = new mongoose.Schema(
 			type: Boolean,
 			required: true,
 		},
+		premium: {
+			type: Boolean,
+			default: false,
+		},
 		imageUrls: {
 			type: [String],
 			required: true,
