@@ -1,63 +1,63 @@
-/* eslint-disable react/prop-types */
-import { useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export default function Contact({ listing }) {
-  const [seller, setSeller] = useState(null);
-  const [message, setMessage] = useState("");
+	const [seller, setSeller] = useState(null)
+	const [message, setMessage] = useState('')
 
-  const onChange = (e) => {
-    setMessage(e.target.value);
-  };
+	const onChange = e => {
+		setMessage(e.target.value)
+	}
 
-  const fetchSeller = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/user/${listing.userRef}`);
-      const data = await res.json();
-      if (!res.ok || data.success === false) {
-        throw new Error(data.message || "Error fetching seller information");
-      }
-      setSeller(data);
-    } catch (error) {
-      console.error("Error fetching seller:", error);
-      toast.error("Error fetching seller information. Please try again later.");
-    }
-  }, [listing.userRef]);
+	useEffect(() => {
+		const fetchSeller = async () => {
+			try {
+				const res = await fetch(`/api/user/${listing.userRef}`)
+				const data = await res.json()
+				if (!res.ok || data.success === false) {
+					throw new Error(data.message || 'Error fetching seller information')
+				}
+				setSeller(data)
+			} catch (error) {
+				console.error('Error fetching seller:', error)
+				toast.error(
+					'Error fetching seller information. Please try again later.'
+				)
+			}
+		}
 
-  useEffect(() => {
-    fetchSeller();
-  }, [fetchSeller]);
+		fetchSeller()
+	}, [listing.userRef])
 
-  if (!seller) {
-    return null;
-  }
+	if (!seller) {
+		return null
+	}
 
-  const subject = encodeURIComponent(`Regarding ${listing.name}`);
-  const body = encodeURIComponent(message);
+	const subject = encodeURIComponent(`Regarding ${listing.name}`)
+	const body = encodeURIComponent(message)
 
-  return (
-    <div className="flex flex-col gap-2">
-      <p>
-        Contact <span className="font-semibold">{seller.username}</span> for{" "}
-        <span className="font-semibold">{listing.name.toLowerCase()}</span>
-      </p>
-      <textarea
-        name="message"
-        id="message"
-        rows="2"
-        value={message}
-        onChange={onChange}
-        placeholder="Enter your message here..."
-        className="w-full border p-3 rounded-lg"
-      ></textarea>
-      <Link
-        to={`mailto:${seller.email}?subject=${subject}&body=${body}`}
-        className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:bg-slate-800"
-      >
-        Send Message
-      </Link>
-    </div>
-  );
+	return (
+		<div className="flex flex-col gap-2">
+			<p>
+				Contact <span className="font-semibold">{seller.username}</span> for{' '}
+				<span className="font-semibold">{listing.name.toLowerCase()}</span>
+			</p>
+			<textarea
+				name="message"
+				id="message"
+				rows="2"
+				value={message}
+				onChange={onChange}
+				placeholder="Enter your message here..."
+				className="w-full border p-3 rounded-lg"
+			></textarea>
+			<Link
+				to={`mailto:${seller.email}?subject=${subject}&body=${body}`}
+				className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:bg-slate-800"
+			>
+				Send Message
+			</Link>
+		</div>
+	)
 }

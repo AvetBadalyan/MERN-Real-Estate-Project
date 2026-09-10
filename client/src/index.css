@@ -3,32 +3,32 @@
 @tailwind utilities;
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 body {
-  background: rgb(248, 250, 252);
+	background: rgb(248, 250, 252);
 }
 
 @keyframes riseIn {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	from {
+		opacity: 0;
+		transform: translateY(18px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .animate-rise {
-  animation: riseIn 650ms ease both;
+	animation: riseIn 650ms ease both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-rise {
-    animation: none;
-  }
+	.animate-rise {
+		animation: none;
+	}
 }
