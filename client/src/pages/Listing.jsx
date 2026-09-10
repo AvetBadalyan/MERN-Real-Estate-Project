@@ -14,7 +14,7 @@ import 'swiper/css/bundle'
 import { Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import Contact from '../components/Contact'
-import { getLocalImageUrl } from '../utils/images'
+import { getListingImageUrl } from '../utils/images'
 
 export default function Listing() {
 	const [listing, setListing] = useState(null)
@@ -78,7 +78,7 @@ export default function Listing() {
 								<div
 									className="h-[280px] w-full bg-cover bg-center sm:h-[420px] lg:h-[550px]"
 									style={{
-										backgroundImage: `url('${getLocalImageUrl(url)}')`,
+										backgroundImage: `url('${getListingImageUrl(url)}')`,
 									}}
 								></div>
 							</SwiperSlide>

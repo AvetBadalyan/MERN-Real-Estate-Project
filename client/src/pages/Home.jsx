@@ -13,7 +13,7 @@ import 'swiper/css/bundle'
 import { Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import ListingItem from '../components/ListingItem'
-import { getLocalImageUrl } from '../utils/images'
+import { getListingImageUrl } from '../utils/images'
 
 SwiperCore.use([Navigation])
 
@@ -230,7 +230,7 @@ export default function Home() {
 										<Link to={`/listing/${listing._id}`} className="block">
 											<div
 												style={{
-													backgroundImage: `url('${getLocalImageUrl(
+													backgroundImage: `url('${getListingImageUrl(
 														listing.imageUrls[0]
 													)}')`,
 												}}

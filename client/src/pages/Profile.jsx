@@ -18,7 +18,7 @@ import {
 import {
 	FALLBACK_AVATAR_IMAGE,
 	getAvatarImageUrl,
-	getLocalImageUrl,
+	getListingImageUrl,
 } from '../utils/images'
 import { uploadImage } from '../utils/uploadImage'
 
@@ -283,7 +283,7 @@ export default function Profile() {
 						>
 							<Link to={`/listing/${listing._id}`} className="w-full sm:w-auto">
 								<img
-									src={getLocalImageUrl(listing.imageUrls[0])}
+									src={getListingImageUrl(listing.imageUrls[0])}
 									alt="listing cover"
 									className="h-28 w-full rounded-md object-cover sm:h-16 sm:w-16 sm:object-contain"
 								/>

@@ -1,6 +1,6 @@
 import { MdLocationOn } from 'react-icons/md'
 import { Link } from 'react-router-dom'
-import { getLocalImageUrl } from '../utils/images'
+import { getListingImageUrl } from '../utils/images'
 
 export default function ListingItem({
 	listing,
@@ -20,7 +20,7 @@ export default function ListingItem({
 		bathrooms,
 	} = listing
 
-	const listingImage = getLocalImageUrl(imageUrls[0])
+	const listingImage = getListingImageUrl(imageUrls[0])
 
 	const price = offer ? discountPrice : regularPrice
 	const formattedPrice = price.toLocaleString('en-US')

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { getLocalImageUrl } from '../utils/images'
+import { getListingImageUrl } from '../utils/images'
 import { uploadImage } from '../utils/uploadImage'
 
 export default function ListingForm({ mode }) {
@@ -304,7 +304,7 @@ export default function ListingForm({ mode }) {
 							{formData.imageUrls.map((url, i) => (
 								<div key={i} className="relative">
 									<img
-										src={getLocalImageUrl(url)}
+										src={getListingImageUrl(url)}
 										alt="Uploaded"
 										className="w-full h-full object-cover"
 									/>
