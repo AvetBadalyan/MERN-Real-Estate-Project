@@ -1,11 +1,11 @@
 {
 	"name": "avets-estate",
 	"version": "1.0.0",
-	"main": "index.js",
+	"main": "backend/server.js",
 	"type": "module",
 	"scripts": {
-		"dev": "nodemon --watch backend --ext js,json backend/index.js",
-		"start": "node backend/index.js",
+		"dev": "nodemon --watch backend --ext js,json backend/server.js",
+		"start": "node backend/server.js",
 		"build": "npm install && npm install --prefix client && npm run build --prefix client",
 		"lint": "eslint backend --ext .js",
 		"lint:fix": "eslint backend --ext .js --fix",
@@ -18,17 +18,19 @@
 	"description": "",
 	"dependencies": {
 		"bcryptjs": "^2.4.3",
+		"cloudinary": "^2.11.0",
 		"cookie-parser": "^1.4.6",
+		"cors": "^2.8.6",
 		"dotenv": "^16.4.5",
 		"express": "^4.19.2",
 		"jsonwebtoken": "^9.0.2",
 		"mongoose": "^8.3.4",
-		"multer": "^2.1.1",
-		"nodemon": "^3.1.0"
+		"multer": "^2.1.1"
 	},
 	"devDependencies": {
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
+		"nodemon": "^3.1.0",
 		"prettier": "^3.3.2"
 	}
 }

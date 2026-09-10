@@ -5,6 +5,7 @@ export async function uploadImage(file) {
 	const res = await fetch('/api/upload', {
 		method: 'POST',
 		body: data,
+		credentials: 'include',
 	})
 	const result = await res.json().catch(() => ({}))
 
