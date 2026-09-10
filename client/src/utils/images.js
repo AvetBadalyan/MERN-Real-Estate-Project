@@ -1,6 +1,7 @@
 const FALLBACK_LISTING_IMAGE =
-	'/images/1718130801032_hero-real-estate-facts-trends.jpeg'
-export const FALLBACK_AVATAR_IMAGE = '/images/default-avatar.svg'
+	'https://res.cloudinary.com/dkaknfwcl/image/upload/v1789063532/avets-estate/fnxl0vhkyq6zv5cm09sg.jpg'
+export const FALLBACK_AVATAR_IMAGE =
+	'https://res.cloudinary.com/dkaknfwcl/image/upload/v1789063533/avets-estate/jmk8vydzrnzx7uvfbqr9.svg'
 
 export const getListingImageUrl = (
 	imageUrl,

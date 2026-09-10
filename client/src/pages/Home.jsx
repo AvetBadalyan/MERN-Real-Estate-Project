@@ -17,7 +17,8 @@ import { getListingImageUrl } from '../utils/images'
 
 SwiperCore.use([Navigation])
 
-const heroImage = '/images/1717701464707_luxury-residential-real-estate.png'
+const heroImage =
+	'https://res.cloudinary.com/dkaknfwcl/image/upload/v1789063531/avets-estate/ixodcblawsxjfc2c0vmj.png'
 
 const quickLinks = [
 	{ label: 'Buy', to: '/search?type=sale', icon: FaHome },
