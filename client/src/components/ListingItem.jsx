@@ -95,7 +95,7 @@ export default function ListingItem({
 						<MdCompareArrows className="h-5 w-5" />
 					</button>
 					{offer && (
-						<span className="absolute left-3 top-3 rounded-full bg-amber-500 px-3 py-1 text-xs font-semibold text-white shadow-lg">
+						<span className="absolute left-3 top-3 rounded-full bg-amber-600 px-3 py-1 text-xs font-semibold text-white shadow-lg">
 							Special Offer
 						</span>
 					)}
@@ -112,11 +112,11 @@ export default function ListingItem({
 					</p>
 					<div className="flex items-center gap-1">
 						<MdLocationOn className="h-4 w-4 text-amber-600" />
-						<p className="w-full truncate text-sm text-gray-600 dark:text-slate-400">
+						<p className="w-full truncate text-sm text-slate-600 dark:text-slate-300">
 							{address}
 						</p>
 					</div>
-					<p className="line-clamp-2 text-sm text-gray-600 dark:text-slate-400">
+					<p className="line-clamp-2 text-sm text-slate-600 dark:text-slate-300">
 						{description}
 					</p>
 					<p className="mt-2 font-bold text-slate-800 dark:text-slate-100">

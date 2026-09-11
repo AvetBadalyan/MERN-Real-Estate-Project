@@ -126,13 +126,13 @@ export default function PriceHistoryChart({ currentPrice, type }) {
 						/>
 						<XAxis
 							dataKey="month"
-							tick={{ fontSize: 12, fill: '#94a3b8' }}
+							tick={{ fontSize: 12, fill: '#64748b' }}
 							tickLine={false}
 							axisLine={false}
 						/>
 						<YAxis
 							tickFormatter={formatPrice}
-							tick={{ fontSize: 12, fill: '#94a3b8' }}
+							tick={{ fontSize: 12, fill: '#64748b' }}
 							tickLine={false}
 							axisLine={false}
 							width={60}
@@ -149,7 +149,7 @@ export default function PriceHistoryChart({ currentPrice, type }) {
 				</ResponsiveContainer>
 			</div>
 
-			<p className="mt-4 text-center text-xs text-slate-400 dark:text-slate-500">
+			<p className="mt-4 text-center text-xs text-slate-500 dark:text-slate-400">
 				* Historical price data is simulated for demonstration
 			</p>
 		</div>

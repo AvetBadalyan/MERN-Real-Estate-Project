@@ -100,7 +100,7 @@ export default function MortgageCalculator({ price, type }) {
 								onChange={e => setDownPaymentPercent(Number(e.target.value))}
 								className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-slate-200 accent-amber-500 dark:bg-slate-700"
 							/>
-							<div className="mt-1 flex justify-between text-xs text-slate-400">
+							<div className="mt-1 flex justify-between text-xs text-slate-500 dark:text-slate-400">
 								<span>0%</span>
 								<span>50%</span>
 							</div>
@@ -129,7 +129,7 @@ export default function MortgageCalculator({ price, type }) {
 								onChange={e => setInterestRate(Number(e.target.value))}
 								className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-slate-200 accent-amber-500 dark:bg-slate-700"
 							/>
-							<div className="mt-1 flex justify-between text-xs text-slate-400">
+							<div className="mt-1 flex justify-between text-xs text-slate-500 dark:text-slate-400">
 								<span>1%</span>
 								<span>15%</span>
 							</div>
@@ -152,7 +152,7 @@ export default function MortgageCalculator({ price, type }) {
 										onClick={() => setLoanTerm(term)}
 										className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${
 											loanTerm === term
-												? 'bg-amber-500 text-white'
+												? 'bg-amber-600 text-white'
 												: 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
 										}`}
 									>
@@ -201,7 +201,7 @@ export default function MortgageCalculator({ price, type }) {
 						</div>
 					</div>
 
-					<p className="text-center text-xs text-slate-400 dark:text-slate-500">
+					<p className="text-center text-xs text-slate-500 dark:text-slate-400">
 						* Estimate only. Does not include taxes, insurance, or PMI.
 					</p>
 				</div>

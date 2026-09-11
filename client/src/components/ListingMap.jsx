@@ -1,9 +1,9 @@
+import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect, useState } from 'react'
 import { FaMapMarkerAlt } from 'react-icons/fa'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { Link } from 'react-router-dom'
-import L from 'leaflet'
 import { getListingImageUrl } from '../utils/images'
 
 // Fix for default marker icons in Leaflet with Vite
@@ -125,7 +125,7 @@ export default function ListingMap({ listings, height = '400px' }) {
 										<h3 className="truncate font-semibold text-slate-800">
 											{listing.name}
 										</h3>
-										<p className="text-sm font-bold text-amber-600">
+										<p className="text-sm font-bold text-amber-700">
 											${price.toLocaleString()}
 											{listing.type === 'rent' ? '/mo' : ''}
 										</p>

@@ -280,7 +280,7 @@ export default function ListingForm({ mode }) {
 								required
 							/>
 							{formData.type === 'rent' && (
-								<span className="text-gray-500 dark:text-slate-400">
+								<span className="text-slate-600 dark:text-slate-400">
 									$ / month
 								</span>
 							)}
@@ -303,7 +303,7 @@ export default function ListingForm({ mode }) {
 									required={formData.offer}
 								/>
 								{formData.type === 'rent' && (
-									<span className="text-gray-500 dark:text-slate-400">
+									<span className="text-slate-600 dark:text-slate-400">
 										$ / month
 									</span>
 								)}
