@@ -4,21 +4,39 @@ A MERN stack real estate app where users can browse, search, create, update, and
 
 **Live demo:** https://avets-real-estate.vercel.app
 
+## Screenshots
+
+| Home                                                   | Search                                                   | Listing Detail                                            |
+| ------------------------------------------------------ | -------------------------------------------------------- | --------------------------------------------------------- |
+| ![Home](client/src/assets/screenshots/screenshot1.jpg) | ![Search](client/src/assets/screenshots/screenshot2.jpg) | ![Listing](client/src/assets/screenshots/screenshot3.jpg) |
+
+| Dark Mode                                              | Sign In                                                   | Sign Up                                                   |
+| ------------------------------------------------------ | --------------------------------------------------------- | --------------------------------------------------------- |
+| ![Dark](client/src/assets/screenshots/screenshot4.jpg) | ![Sign In](client/src/assets/screenshots/screenshot5.jpg) | ![Sign Up](client/src/assets/screenshots/screenshot6.jpg) |
+
 ## Features
 
 - Browse recent offers, rentals, and sale listings on the home page
-- Search listings by keyword, type, amenities, offer status, and sort order
-- Listing detail pages with image galleries and seller contact flow
+- Search listings by keyword, type, country, city, amenities, and sort order
+- Filter properties across 10 countries with city-level precision
+- Dark mode with system preference detection
+- Favorites list (persisted in localStorage)
+- Compare up to 3 properties side-by-side
+- Listing detail pages with image galleries, price history charts, and mortgage calculator
+- Clickable addresses open Google Maps for real location viewing
 - Email/password auth and Google sign-in (Firebase Auth)
 - Protected profile, create-listing, and update-listing pages
 - Authenticated users can create, update, and delete their own listings
 - Image uploads via Cloudinary
+- Toast notifications for all user actions
+- Skeleton loading states for smooth UX
+- Responsive design for mobile and desktop
 
 ## Tech Stack
 
 **Backend** — Node.js, Express, MongoDB Atlas, Mongoose, JWT, bcryptjs, Cloudinary, multer
 
-**Frontend** — React, Vite, React Router, Redux Toolkit, Redux Persist, Tailwind CSS, React Toastify, Swiper, Firebase Auth
+**Frontend** — React, Vite, React Router, Redux Toolkit, Redux Persist, Tailwind CSS, React Toastify, Swiper, Recharts, Firebase Auth
 
 ## Project Structure
 
