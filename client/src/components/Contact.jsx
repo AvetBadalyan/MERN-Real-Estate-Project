@@ -31,30 +31,41 @@ export default function Contact({ listing }) {
 	}, [listing.userRef])
 
 	if (!seller) {
-		return null
+		return (
+			<div className="flex items-center gap-2 py-3 text-sm text-slate-500 dark:text-slate-400">
+				<div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-600 dark:border-slate-600 dark:border-t-slate-300" />
+				Loading seller info...
+			</div>
+		)
 	}
 
 	const subject = encodeURIComponent(`Regarding ${listing.name}`)
 	const body = encodeURIComponent(message)
 
 	return (
-		<div className="flex flex-col gap-2">
-			<p>
-				Contact <span className="font-semibold">{seller.username}</span> for{' '}
-				<span className="font-semibold">{listing.name.toLowerCase()}</span>
+		<div className="flex flex-col gap-3">
+			<p className="text-sm text-slate-700 dark:text-slate-300">
+				Contact{' '}
+				<span className="font-semibold text-slate-900 dark:text-white">
+					{seller.username}
+				</span>{' '}
+				about{' '}
+				<span className="font-semibold text-slate-900 dark:text-white">
+					{listing.name}
+				</span>
 			</p>
 			<textarea
 				name="message"
 				id="message"
-				rows="2"
+				rows="3"
 				value={message}
 				onChange={onChange}
 				placeholder="Enter your message here..."
-				className="w-full rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400"
-			></textarea>
+				className="w-full rounded-lg border border-slate-300 p-3 text-slate-800 placeholder-slate-400 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+			/>
 			<Link
 				to={`mailto:${seller.email}?subject=${subject}&body=${body}`}
-				className="rounded-lg bg-slate-700 p-3 text-center uppercase text-white hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
+				className="rounded-lg bg-slate-700 p-3 text-center font-semibold uppercase text-white transition hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
 			>
 				Send Message
 			</Link>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { FaList, FaMap } from 'react-icons/fa'
+import { FaMap, FaThLarge } from 'react-icons/fa'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import EmptyState from '../components/EmptyState'
@@ -66,8 +66,8 @@ export default function Search() {
 				const searchQuery = new URLSearchParams(params).toString()
 				const res = await fetch(`/api/listing?${searchQuery}`)
 				const data = await res.json()
-				if (data.length === 0) {
-					toast.info('No listings found!')
+				if (data.length === 0 && Object.keys(params).length > 0) {
+					toast.info('No listings match your filters.')
 				}
 				setShowMore(data.length > 8)
 				setListings(data)
@@ -132,24 +132,26 @@ export default function Search() {
 
 	return (
 		<div className="flex flex-col md:flex-row">
-			<div className="border-b-2 px-4 py-6 dark:border-slate-700 dark:text-slate-300 sm:px-6 md:min-h-screen md:w-80 md:border-r-2 lg:w-96">
+			<div className="border-b-2 bg-white px-4 py-6 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 sm:px-6 md:min-h-screen md:w-80 md:border-b-0 md:border-r-2 lg:w-96">
 				<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 					<div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-						<label className="font-semibold sm:whitespace-nowrap">
+						<label className="font-semibold text-slate-800 dark:text-slate-200 sm:whitespace-nowrap">
 							Search Term:
 						</label>
 						<input
 							type="text"
 							id="searchTerm"
 							placeholder="Search..."
-							className="w-full rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+							className="w-full rounded-lg border border-slate-300 p-3 text-slate-800 placeholder-slate-400 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400"
 							value={sidebardata.searchTerm}
 							onChange={handleChange}
 						/>
 					</div>
 					<div className="flex flex-col gap-3">
-						<label className="font-semibold">Type:</label>
-						<div className="flex flex-wrap gap-3">
+						<label className="font-semibold text-slate-800 dark:text-slate-200">
+							Type:
+						</label>
+						<div className="flex flex-wrap gap-3 text-slate-700 dark:text-slate-300">
 							<div className="flex gap-2">
 								<input
 									type="radio"
@@ -195,8 +197,10 @@ export default function Search() {
 							</div>
 						</div>
 					</div>
-					<div className="flex flex-wrap items-center gap-2">
-						<label className="font-semibold">Amenities:</label>
+					<div className="flex flex-wrap items-center gap-2 text-slate-700 dark:text-slate-300">
+						<label className="font-semibold text-slate-800 dark:text-slate-200">
+							Amenities:
+						</label>
 						<div className="flex gap-2">
 							<input
 								type="checkbox"
@@ -219,12 +223,14 @@ export default function Search() {
 						</div>
 					</div>
 					<div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-						<label className="font-semibold">Sort:</label>
+						<label className="font-semibold text-slate-800 dark:text-slate-200">
+							Sort:
+						</label>
 						<select
 							onChange={handleChange}
 							value={`${sidebardata.sort}_${sidebardata.order}`}
 							id="sort_order"
-							className="w-full rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white sm:w-auto"
+							className="w-full rounded-lg border border-slate-300 p-3 text-slate-800 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white sm:w-auto"
 						>
 							<option value="regularPrice_desc">Price high to low</option>
 							<option value="regularPrice_asc">Price low to high</option>
@@ -257,7 +263,7 @@ export default function Search() {
 									: 'text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
 							}`}
 						>
-							<FaList className="h-4 w-4" />
+							<FaThLarge className="h-4 w-4" />
 							<span className="hidden sm:inline">Grid</span>
 						</button>
 						<button

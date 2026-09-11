@@ -92,8 +92,10 @@ export default function PriceHistoryChart({ currentPrice, type }) {
 				</div>
 				<div className="text-right">
 					<span
-						className={`text-sm font-medium ${
-							isPositive ? 'text-green-500' : 'text-red-500'
+						className={`text-sm font-semibold ${
+							isPositive
+								? 'text-green-700 dark:text-green-400'
+								: 'text-red-600 dark:text-red-400'
 						}`}
 					>
 						{isPositive ? '+' : ''}

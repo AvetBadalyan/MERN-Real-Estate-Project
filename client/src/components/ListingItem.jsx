@@ -39,7 +39,11 @@ export default function ListingItem({
 		e.preventDefault()
 		e.stopPropagation()
 		const added = toggleFavorite(listing)
-		toast.success(added ? 'Added to favorites!' : 'Removed from favorites')
+		if (added) {
+			toast.success('Added to favorites! Check the heart icon in header')
+		} else {
+			toast.info('Removed from favorites')
+		}
 	}
 
 	const handleCompareClick = e => {
@@ -47,7 +51,7 @@ export default function ListingItem({
 		e.stopPropagation()
 		const added = toggleCompare(listing)
 		if (added === true) {
-			toast.success('Added to compare')
+			toast.success('Added to compare! View in header')
 		} else if (added === false) {
 			toast.info('Removed from compare')
 		}
@@ -103,7 +107,7 @@ export default function ListingItem({
 					)}
 				</div>
 				<div className="flex w-full flex-col gap-2 p-4">
-					<p className="truncate text-lg font-semibold text-slate-700 transition-colors group-hover:text-amber-600 dark:text-slate-200">
+					<p className="truncate text-lg font-semibold text-slate-800 transition-colors group-hover:text-amber-700 dark:text-slate-100 dark:group-hover:text-amber-400">
 						{name}
 					</p>
 					<div className="flex items-center gap-1">
@@ -115,11 +119,11 @@ export default function ListingItem({
 					<p className="line-clamp-2 text-sm text-gray-600 dark:text-slate-400">
 						{description}
 					</p>
-					<p className="mt-2 font-semibold text-slate-500 dark:text-slate-300">
+					<p className="mt-2 font-bold text-slate-800 dark:text-slate-100">
 						${formattedPrice}
 						{rentSuffix}
 					</p>
-					<div className="flex gap-4 text-slate-700 dark:text-slate-400">
+					<div className="flex gap-4 text-slate-700 dark:text-slate-300">
 						<div className="text-xs font-bold">
 							{bedrooms} {bedrooms > 1 ? 'beds' : 'bed'}
 						</div>

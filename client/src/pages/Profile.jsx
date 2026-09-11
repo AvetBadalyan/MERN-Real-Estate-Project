@@ -184,24 +184,36 @@ export default function Profile() {
 					accept="image/*"
 					onChange={e => setFile(e.target.files[0])}
 				/>
-				<img
-					src={getAvatarImageUrl(formData.avatar || currentUser.avatar)}
-					alt="profile"
-					className="mt-2 h-24 w-24 cursor-pointer self-center rounded-full object-cover"
-					onClick={() => fileRef.current.click()}
-					onError={e => {
-						e.currentTarget.src = FALLBACK_AVATAR_IMAGE
-					}}
-				/>
+				<div className="group relative mt-2 h-24 w-24 cursor-pointer self-center">
+					<img
+						src={getAvatarImageUrl(formData.avatar || currentUser.avatar)}
+						alt="profile"
+						className="h-24 w-24 rounded-full object-cover transition-opacity group-hover:opacity-75"
+						onClick={() => fileRef.current.click()}
+						onError={e => {
+							e.currentTarget.src = FALLBACK_AVATAR_IMAGE
+						}}
+					/>
+					<div
+						className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100"
+						onClick={() => fileRef.current.click()}
+					>
+						<span className="text-xs font-medium text-white">Change photo</span>
+					</div>
+				</div>
 				<p className="self-center text-sm">
 					{fileUploadError ? (
-						<span className="text-red-700">{fileUploadError}</span>
+						<span className="text-red-600 dark:text-red-400">
+							{fileUploadError}
+						</span>
 					) : filePercentage > 0 && filePercentage < 100 ? (
-						<span className="text-slate-700 dark:text-slate-300">
+						<span className="text-slate-600 dark:text-slate-300">
 							Uploading {filePercentage}%
 						</span>
 					) : filePercentage === 100 ? (
-						<span className="text-amber-700">Image successfully uploaded!</span>
+						<span className="text-green-700 dark:text-green-400">
+							Image successfully uploaded!
+						</span>
 					) : null}
 				</p>
 				<input
@@ -209,7 +221,7 @@ export default function Profile() {
 					placeholder="Username"
 					id="username"
 					defaultValue={currentUser.username}
-					className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+					className="rounded-lg border border-slate-300 p-3 text-slate-800 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 					onChange={handleChange}
 				/>
 				<input
@@ -217,15 +229,15 @@ export default function Profile() {
 					placeholder="Email"
 					id="email"
 					defaultValue={currentUser.email}
-					className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+					className="rounded-lg border border-slate-300 p-3 text-slate-800 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 					onChange={handleChange}
 				/>
 				<div className="relative">
 					<input
 						type={showPassword ? 'text' : 'password'}
-						placeholder="Password"
+						placeholder="New password (leave blank to keep current)"
 						id="password"
-						className="w-full rounded-lg border p-3 pr-10 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+						className="w-full rounded-lg border border-slate-300 p-3 pr-10 text-slate-800 placeholder-slate-400 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
 						onChange={handleChange}
 					/>
 					<button
@@ -269,10 +281,12 @@ export default function Profile() {
 				className="mt-4 w-full rounded-lg bg-amber-600 p-3 text-center uppercase text-white hover:bg-amber-700"
 				onClick={handleShowListings}
 			>
-				Show Listings
+				Show My Listings
 			</button>
 			{showListingsError && (
-				<p className="mt-4 text-red-700">Error loading listings</p>
+				<p className="mt-4 text-red-600 dark:text-red-400">
+					Error loading listings. Please try again.
+				</p>
 			)}
 
 			{userListings && userListings.length > 0 && (

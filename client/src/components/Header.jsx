@@ -81,6 +81,7 @@ export default function Header() {
 						<Link
 							to="/compare"
 							className="relative flex items-center text-slate-700 transition-colors hover:text-blue-500 dark:text-slate-300"
+							title="Compare properties"
 						>
 							<MdCompareArrows className="h-6 w-6" />
 							{compareCount > 0 && (
@@ -94,6 +95,7 @@ export default function Header() {
 						<Link
 							to="/favorites"
 							className="relative flex items-center text-slate-700 transition-colors hover:text-red-500 dark:text-slate-300"
+							title="Your favorites"
 						>
 							<FaHeart className="h-5 w-5" />
 							{favoritesCount > 0 && (
@@ -104,20 +106,21 @@ export default function Header() {
 						</Link>
 					</li>
 					<li className="text-slate-700 hover:underline dark:text-slate-300">
-						<Link to="/profile">
-							{currentUser ? (
+						{currentUser ? (
+							<Link to="/profile">
 								<img
 									className="h-7 w-7 rounded-full object-cover"
 									src={getAvatarImageUrl(currentUser.avatar)}
 									alt="profile"
+									title="Your profile"
 									onError={e => {
 										e.currentTarget.src = FALLBACK_AVATAR_IMAGE
 									}}
 								/>
-							) : (
-								'Sign in'
-							)}
-						</Link>
+							</Link>
+						) : (
+							<Link to="/sign-in">Sign in</Link>
+						)}
 					</li>
 				</ul>
 			</div>

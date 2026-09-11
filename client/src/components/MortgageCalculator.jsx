@@ -59,7 +59,7 @@ export default function MortgageCalculator({ price, type }) {
 						<p className="text-sm text-slate-500 dark:text-slate-400">
 							Est. Monthly
 						</p>
-						<p className="text-xl font-bold text-amber-600">
+						<p className="text-xl font-bold text-amber-700 dark:text-amber-400">
 							${Math.round(calculations.monthlyPayment).toLocaleString()}
 						</p>
 					</div>
@@ -178,7 +178,7 @@ export default function MortgageCalculator({ price, type }) {
 								<p className="text-xs text-slate-500 dark:text-slate-400">
 									Monthly Payment
 								</p>
-								<p className="font-semibold text-amber-600">
+								<p className="font-semibold text-amber-700 dark:text-amber-400">
 									${Math.round(calculations.monthlyPayment).toLocaleString()}
 								</p>
 							</div>

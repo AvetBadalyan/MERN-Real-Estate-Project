@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
+	FaArrowLeft,
 	FaBath,
 	FaBed,
 	FaChair,
@@ -9,7 +10,7 @@ import {
 	FaVideo,
 } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Contact from '../components/Contact'
 import ImageGallery from '../components/ImageGallery'
@@ -23,6 +24,7 @@ export default function Listing() {
 	const [error, setError] = useState(false)
 	const [contact, setContact] = useState(false)
 	const params = useParams()
+	const navigate = useNavigate()
 	const { currentUser } = useSelector(state => state.user)
 
 	useEffect(() => {
@@ -81,16 +83,33 @@ export default function Listing() {
 			{listing && (
 				<div>
 					<ImageGallery images={listing.imageUrls} />
+					<div className="fixed left-4 top-24 z-10">
+						<button
+							onClick={() => navigate(-1)}
+							className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-lg transition-transform hover:scale-110 dark:bg-slate-800"
+							aria-label="Go back"
+						>
+							<FaArrowLeft className="h-4 w-4 text-slate-700 dark:text-white" />
+						</button>
+					</div>
 					<div className="fixed right-4 top-24 z-10">
 						<ShareButton title={listing.name} />
 					</div>
 					<div className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-6 sm:px-6">
-						<p className="text-2xl font-semibold dark:text-white">
-							{listing.name} - $
+						<h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+							{listing.name}
+						</h1>
+						<p className="text-xl font-bold text-amber-700 dark:text-amber-400">
+							$
 							{listing.offer
 								? listing.discountPrice.toLocaleString('en-US')
 								: listing.regularPrice.toLocaleString('en-US')}
-							{listing.type === 'rent' && ' / month'}
+							{listing.type === 'rent' && (
+								<span className="text-base font-medium text-slate-600 dark:text-slate-400">
+									{' '}
+									/ month
+								</span>
+							)}
 						</p>
 						<p className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
 							<FaMapMarkerAlt className="text-amber-600" />
@@ -144,7 +163,7 @@ export default function Listing() {
 							</span>
 							{listing.description}
 						</p>
-						<ul className="flex flex-wrap items-center gap-4 text-sm font-semibold text-amber-700 dark:text-amber-500">
+						<ul className="flex flex-wrap items-center gap-4 text-sm font-semibold text-amber-700 dark:text-amber-400">
 							<li className="flex items-center gap-1 whitespace-nowrap">
 								<FaBed className="text-lg" />
 								{listing.bedrooms > 1
