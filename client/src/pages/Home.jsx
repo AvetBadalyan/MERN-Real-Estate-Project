@@ -13,6 +13,7 @@ import 'swiper/css/bundle'
 import { Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import ListingItem from '../components/ListingItem'
+import SkeletonCard from '../components/SkeletonCard'
 import { getListingImageUrl } from '../utils/images'
 
 SwiperCore.use([Navigation])
@@ -41,9 +42,14 @@ const featureCards = [
 	},
 ]
 
-function ListingSection({ title, subtitle, linkText, linkTo, listings }) {
-	if (listings.length === 0) return null
-
+function ListingSection({
+	title,
+	subtitle,
+	linkText,
+	linkTo,
+	listings,
+	loading,
+}) {
 	return (
 		<section className="animate-rise space-y-5">
 			<div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -51,12 +57,12 @@ function ListingSection({ title, subtitle, linkText, linkTo, listings }) {
 					<p className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-700">
 						{subtitle}
 					</p>
-					<h2 className="text-2xl font-semibold text-slate-800 sm:text-3xl">
+					<h2 className="text-2xl font-semibold text-slate-800 dark:text-white sm:text-3xl">
 						{title}
 					</h2>
 				</div>
 				<Link
-					className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-amber-700"
+					className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-amber-700 dark:text-slate-300"
 					to={linkTo}
 				>
 					{linkText}
@@ -64,15 +70,22 @@ function ListingSection({ title, subtitle, linkText, linkTo, listings }) {
 				</Link>
 			</div>
 			<div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{listings.map(listing => (
-					<ListingItem className="w-full" listing={listing} key={listing._id} />
-				))}
+				{loading
+					? [...Array(4)].map((_, i) => <SkeletonCard key={i} />)
+					: listings.map(listing => (
+							<ListingItem
+								className="w-full"
+								listing={listing}
+								key={listing._id}
+							/>
+						))}
 			</div>
 		</section>
 	)
 }
 
 export default function Home() {
+	const [loading, setLoading] = useState(true)
 	const [listings, setListings] = useState({
 		offer: [],
 		rent: [],
@@ -102,6 +115,8 @@ export default function Home() {
 			} catch (error) {
 				console.error('Failed to fetch listings:', error)
 				toast.error('Failed to fetch listings.')
+			} finally {
+				setLoading(false)
 			}
 		}
 
@@ -109,7 +124,7 @@ export default function Home() {
 	}, [])
 
 	return (
-		<div className="overflow-hidden bg-slate-50 text-slate-800">
+		<div className="overflow-hidden bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200">
 			<section
 				className="relative min-h-[540px] bg-cover bg-center px-4 py-10 sm:px-6 lg:min-h-[600px] lg:py-16"
 				style={{ backgroundImage: `url('${heroImage}')` }}
@@ -158,28 +173,32 @@ export default function Home() {
 				</div>
 			</section>
 
-			<section className="border-b border-slate-200 bg-white px-4 sm:px-6">
+			<section className="border-b border-slate-200 bg-white px-4 dark:border-slate-700 dark:bg-slate-800 sm:px-6">
 				<div className="mx-auto grid max-w-7xl gap-4 py-8 sm:grid-cols-3">
-					<div className="animate-rise rounded-md border border-slate-200 p-4 sm:p-5">
-						<p className="text-3xl font-bold text-slate-900">
+					<div className="animate-rise rounded-md border border-slate-200 p-4 dark:border-slate-700 sm:p-5">
+						<p className="text-3xl font-bold text-slate-900 dark:text-white">
 							{listings.rent.length +
 								listings.sale.length +
 								listings.offer.length}
 							+
 						</p>
-						<p className="mt-1 text-sm text-slate-500">
+						<p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
 							fresh listings previewed
 						</p>
 					</div>
-					<div className="animate-rise rounded-md border border-slate-200 p-4 sm:p-5 [animation-delay:90ms]">
-						<p className="text-3xl font-bold text-slate-900">6</p>
-						<p className="mt-1 text-sm text-slate-500">
+					<div className="animate-rise rounded-md border border-slate-200 p-4 dark:border-slate-700 sm:p-5 [animation-delay:90ms]">
+						<p className="text-3xl font-bold text-slate-900 dark:text-white">
+							6
+						</p>
+						<p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
 							photos supported per listing
 						</p>
 					</div>
-					<div className="animate-rise rounded-md border border-slate-200 p-4 sm:p-5 [animation-delay:180ms]">
-						<p className="text-3xl font-bold text-slate-900">2</p>
-						<p className="mt-1 text-sm text-slate-500">
+					<div className="animate-rise rounded-md border border-slate-200 p-4 dark:border-slate-700 sm:p-5 [animation-delay:180ms]">
+						<p className="text-3xl font-bold text-slate-900 dark:text-white">
+							2
+						</p>
+						<p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
 							clear paths: buy or rent
 						</p>
 					</div>
@@ -191,12 +210,12 @@ export default function Home() {
 					{featureCards.map(card => (
 						<div
 							key={card.title}
-							className="animate-rise rounded-md border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
+							className="animate-rise rounded-md border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-5"
 						>
-							<h2 className="text-xl font-semibold text-slate-800">
+							<h2 className="text-xl font-semibold text-slate-800 dark:text-white">
 								{card.title}
 							</h2>
-							<p className="mt-3 text-sm leading-6 text-slate-500">
+							<p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
 								{card.text}
 							</p>
 						</div>
@@ -212,13 +231,13 @@ export default function Home() {
 								<p className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-700">
 									Featured
 								</p>
-								<h2 className="text-2xl font-semibold text-slate-800 sm:text-3xl">
+								<h2 className="text-2xl font-semibold text-slate-800 dark:text-white sm:text-3xl">
 									Homes with active offers
 								</h2>
 							</div>
 							<Link
 								to="/search?offer=true"
-								className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-amber-700"
+								className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-amber-700 dark:text-slate-300"
 							>
 								See all offers
 								<FaArrowRight className="transition-transform group-hover:translate-x-1" />
@@ -267,6 +286,7 @@ export default function Home() {
 						linkText="Show more rentals"
 						linkTo="/search?type=rent"
 						listings={listings.rent}
+						loading={loading}
 					/>
 					<ListingSection
 						title="Recent places for sale"
@@ -274,6 +294,7 @@ export default function Home() {
 						linkText="Show more homes"
 						linkTo="/search?type=sale"
 						listings={listings.sale}
+						loading={loading}
 					/>
 					<ListingSection
 						title="Recent offers"
@@ -281,6 +302,7 @@ export default function Home() {
 						linkText="Show more offers"
 						linkTo="/search?offer=true"
 						listings={listings.offer}
+						loading={loading}
 					/>
 				</div>
 			</div>

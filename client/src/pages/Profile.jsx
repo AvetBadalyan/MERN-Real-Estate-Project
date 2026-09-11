@@ -172,8 +172,10 @@ export default function Profile() {
 	}
 
 	return (
-		<div className="px-4 py-6 sm:px-6 max-w-lg mx-auto">
-			<h1 className="text-3xl font-semibold text-center mb-6">Profile</h1>
+		<div className="mx-auto max-w-lg px-4 py-6 sm:px-6">
+			<h1 className="mb-6 text-center text-3xl font-semibold dark:text-white">
+				Profile
+			</h1>
 			<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 				<input
 					type="file"
@@ -185,17 +187,19 @@ export default function Profile() {
 				<img
 					src={getAvatarImageUrl(formData.avatar || currentUser.avatar)}
 					alt="profile"
-					className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
+					className="mt-2 h-24 w-24 cursor-pointer self-center rounded-full object-cover"
 					onClick={() => fileRef.current.click()}
 					onError={e => {
 						e.currentTarget.src = FALLBACK_AVATAR_IMAGE
 					}}
 				/>
-				<p className="text-sm self-center">
+				<p className="self-center text-sm">
 					{fileUploadError ? (
 						<span className="text-red-700">{fileUploadError}</span>
 					) : filePercentage > 0 && filePercentage < 100 ? (
-						<span className="text-slate-700">Uploading {filePercentage}%</span>
+						<span className="text-slate-700 dark:text-slate-300">
+							Uploading {filePercentage}%
+						</span>
 					) : filePercentage === 100 ? (
 						<span className="text-amber-700">Image successfully uploaded!</span>
 					) : null}
@@ -205,7 +209,7 @@ export default function Profile() {
 					placeholder="Username"
 					id="username"
 					defaultValue={currentUser.username}
-					className="border p-3 rounded-lg"
+					className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 					onChange={handleChange}
 				/>
 				<input
@@ -213,7 +217,7 @@ export default function Profile() {
 					placeholder="Email"
 					id="email"
 					defaultValue={currentUser.email}
-					className="border p-3 rounded-lg"
+					className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 					onChange={handleChange}
 				/>
 				<div className="relative">
@@ -221,13 +225,13 @@ export default function Profile() {
 						type={showPassword ? 'text' : 'password'}
 						placeholder="Password"
 						id="password"
-						className="border p-3 rounded-lg w-full pr-10"
+						className="w-full rounded-lg border p-3 pr-10 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 						onChange={handleChange}
 					/>
 					<button
 						type="button"
 						onClick={() => setShowPassword(!showPassword)}
-						className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+						className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:text-slate-400"
 					>
 						{showPassword ? <FaEyeSlash /> : <FaEye />}
 					</button>
@@ -235,51 +239,51 @@ export default function Profile() {
 				<button
 					type="submit"
 					disabled={loading}
-					className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:bg-slate-800 disabled:opacity-80"
+					className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:bg-slate-800 disabled:opacity-80 dark:bg-slate-600 dark:hover:bg-slate-500"
 				>
 					{loading ? 'Loading...' : 'Update'}
 				</button>
 				<Link
 					to="/create-listing"
-					className="bg-amber-600 text-white p-3 rounded-lg uppercase text-center hover:bg-amber-700"
+					className="rounded-lg bg-amber-600 p-3 text-center uppercase text-white hover:bg-amber-700"
 				>
 					Create Listing
 				</Link>
 			</form>
-			<div className="flex justify-between mt-4">
+			<div className="mt-4 flex justify-between">
 				<span
 					onClick={handleDeleteUser}
-					className="text-red-700 cursor-pointer hover:underline"
+					className="cursor-pointer text-red-700 hover:underline dark:text-red-500"
 				>
 					Delete account
 				</span>
 				<span
 					onClick={handleSignOut}
-					className="text-red-700 cursor-pointer hover:underline"
+					className="cursor-pointer text-red-700 hover:underline dark:text-red-500"
 				>
 					Sign out
 				</span>
 			</div>
 
 			<button
-				className="bg-amber-600 w-full text-white rounded-lg p-3 uppercase text-center hover:bg-amber-700 mt-4"
+				className="mt-4 w-full rounded-lg bg-amber-600 p-3 text-center uppercase text-white hover:bg-amber-700"
 				onClick={handleShowListings}
 			>
 				Show Listings
 			</button>
 			{showListingsError && (
-				<p className="text-red-700 mt-4">Error loading listings</p>
+				<p className="mt-4 text-red-700">Error loading listings</p>
 			)}
 
 			{userListings && userListings.length > 0 && (
 				<div className="flex flex-col gap-4">
-					<h1 className="text-center mt-6 text-2xl font-semibold">
+					<h1 className="mt-6 text-center text-2xl font-semibold dark:text-white">
 						Your Listings
 					</h1>
 					{userListings.map(listing => (
 						<div
 							key={listing._id}
-							className="border rounded-lg p-3 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center sm:gap-4"
+							className="flex flex-col gap-3 rounded-lg border p-3 dark:border-slate-700 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
 						>
 							<Link to={`/listing/${listing._id}`} className="w-full sm:w-auto">
 								<img
@@ -289,7 +293,7 @@ export default function Profile() {
 								/>
 							</Link>
 							<Link
-								className="text-slate-700 font-semibold hover:underline truncate flex-1"
+								className="flex-1 truncate font-semibold text-slate-700 hover:underline dark:text-slate-200"
 								to={`/listing/${listing._id}`}
 							>
 								<p>{listing.name}</p>
@@ -298,12 +302,12 @@ export default function Profile() {
 							<div className="flex w-full justify-between sm:w-auto sm:flex-col sm:items-center">
 								<button
 									onClick={() => handleListingDelete(listing._id)}
-									className="text-red-700 uppercase hover:underline"
+									className="uppercase text-red-700 hover:underline dark:text-red-500"
 								>
 									Delete
 								</button>
 								<Link to={`/update-listing/${listing._id}`}>
-									<button className="text-amber-700 uppercase hover:underline">
+									<button className="uppercase text-amber-700 hover:underline dark:text-amber-500">
 										Edit
 									</button>
 								</Link>

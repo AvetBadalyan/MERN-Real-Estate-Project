@@ -138,16 +138,16 @@ export default function ListingForm({ mode }) {
 	}
 
 	return (
-		<main className="px-4 py-6 sm:px-6 max-w-6xl mx-auto">
-			<h1 className="text-3xl font-semibold text-center mb-6">
+		<main className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+			<h1 className="mb-6 text-center text-3xl font-semibold dark:text-white">
 				{mode === 'create' ? 'Create' : 'Update'} a Listing
 			</h1>
-			<form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
-				<div className="flex flex-col gap-4 flex-1">
+			<form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:flex-row">
+				<div className="flex flex-1 flex-col gap-4">
 					<input
 						type="text"
 						placeholder="Name"
-						className="border p-3 rounded-lg"
+						className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 						id="name"
 						maxLength="62"
 						minLength="10"
@@ -157,7 +157,7 @@ export default function ListingForm({ mode }) {
 					/>
 					<textarea
 						placeholder="Description"
-						className="border p-3 rounded-lg"
+						className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 						id="description"
 						required
 						onChange={handleChange}
@@ -166,13 +166,13 @@ export default function ListingForm({ mode }) {
 					<input
 						type="text"
 						placeholder="Address"
-						className="border p-3 rounded-lg"
+						className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 						id="address"
 						required
 						onChange={handleChange}
 						value={formData.address}
 					/>
-					<div className="flex gap-3 flex-wrap">
+					<div className="flex flex-wrap gap-3 dark:text-slate-300">
 						<div className="flex gap-2">
 							<input
 								type="radio"
@@ -231,12 +231,12 @@ export default function ListingForm({ mode }) {
 					</div>
 					<div className="flex flex-wrap gap-4">
 						<div className="flex flex-col gap-2">
-							<label htmlFor="bedrooms" className="text-lg">
+							<label htmlFor="bedrooms" className="text-lg dark:text-slate-300">
 								Bedrooms
 							</label>
 							<input
 								type="number"
-								className="border p-3 rounded-lg"
+								className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 								id="bedrooms"
 								onChange={handleChange}
 								value={formData.bedrooms}
@@ -245,12 +245,15 @@ export default function ListingForm({ mode }) {
 							/>
 						</div>
 						<div className="flex flex-col gap-2">
-							<label htmlFor="bathrooms" className="text-lg">
+							<label
+								htmlFor="bathrooms"
+								className="text-lg dark:text-slate-300"
+							>
 								Bathrooms
 							</label>
 							<input
 								type="number"
-								className="border p-3 rounded-lg"
+								className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 								id="bathrooms"
 								onChange={handleChange}
 								value={formData.bathrooms}
@@ -261,12 +264,15 @@ export default function ListingForm({ mode }) {
 					</div>
 					<div className="flex flex-wrap gap-4">
 						<div className="flex flex-col gap-2">
-							<label htmlFor="regularPrice" className="text-lg">
+							<label
+								htmlFor="regularPrice"
+								className="text-lg dark:text-slate-300"
+							>
 								Regular Price in $
 							</label>
 							<input
 								type="number"
-								className="border p-3 rounded-lg"
+								className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 								id="regularPrice"
 								onChange={handleChange}
 								value={formData.regularPrice}
@@ -274,17 +280,22 @@ export default function ListingForm({ mode }) {
 								required
 							/>
 							{formData.type === 'rent' && (
-								<span className="text-gray-500">$ / month</span>
+								<span className="text-gray-500 dark:text-slate-400">
+									$ / month
+								</span>
 							)}
 						</div>
 						{formData.offer && (
 							<div className="flex flex-col gap-2">
-								<label htmlFor="discountPrice" className="text-lg">
+								<label
+									htmlFor="discountPrice"
+									className="text-lg dark:text-slate-300"
+								>
 									Discount Price in $
 								</label>
 								<input
 									type="number"
-									className="border p-3 rounded-lg"
+									className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 									id="discountPrice"
 									onChange={handleChange}
 									value={formData.discountPrice}
@@ -292,25 +303,27 @@ export default function ListingForm({ mode }) {
 									required={formData.offer}
 								/>
 								{formData.type === 'rent' && (
-									<span className="text-gray-500">$ / month</span>
+									<span className="text-gray-500 dark:text-slate-400">
+										$ / month
+									</span>
 								)}
 							</div>
 						)}
 					</div>
 				</div>
-				<div className="flex flex-col gap-4 flex-1">
-					<div className="relative border p-3 rounded-lg h-64 sm:h-80 overflow-y-auto">
+				<div className="flex flex-1 flex-col gap-4">
+					<div className="relative h-64 overflow-y-auto rounded-lg border p-3 dark:border-slate-600 sm:h-80">
 						<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
 							{formData.imageUrls.map((url, i) => (
 								<div key={i} className="relative">
 									<img
 										src={getListingImageUrl(url)}
 										alt="Uploaded"
-										className="w-full h-full object-cover"
+										className="h-full w-full object-cover"
 									/>
 									<button
 										type="button"
-										className="absolute top-0 right-0 p-1 bg-red-500 text-white w-8"
+										className="absolute right-0 top-0 w-8 bg-red-500 p-1 text-white"
 										onClick={() => handleRemoveImage(i)}
 									>
 										&times;
@@ -321,14 +334,14 @@ export default function ListingForm({ mode }) {
 								<div className="col-span-2 sm:col-span-1">
 									<input
 										type="file"
-										className="w-full border p-3 rounded-lg text-sm"
+										className="w-full rounded-lg border p-3 text-sm dark:border-slate-600 dark:text-slate-300"
 										multiple
 										accept="image/*"
 										onChange={e => setFiles(e.target.files)}
 									/>
 									<button
 										type="button"
-										className="w-full p-3 mt-2 bg-amber-600 text-white rounded-lg uppercase hover:bg-amber-700"
+										className="mt-2 w-full rounded-lg bg-amber-600 p-3 uppercase text-white hover:bg-amber-700"
 										onClick={handleImageSubmit}
 									>
 										{uploading ? 'Uploading...' : 'Upload Images'}
@@ -337,13 +350,13 @@ export default function ListingForm({ mode }) {
 							)}
 						</div>
 						{imageUploadError && (
-							<div className="text-red-500 mt-2">{imageUploadError}</div>
+							<div className="mt-2 text-red-500">{imageUploadError}</div>
 						)}
 					</div>
-					{error && <div className="text-red-500 mt-2">{error}</div>}
+					{error && <div className="mt-2 text-red-500">{error}</div>}
 					<button
 						type="submit"
-						className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:bg-slate-800 disabled:opacity-80"
+						className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:bg-slate-800 disabled:opacity-80 dark:bg-slate-600 dark:hover:bg-slate-500"
 						disabled={loading}
 					>
 						{loading

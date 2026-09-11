@@ -61,15 +61,17 @@ const AuthForm = ({ isSignUp }) => {
 				return
 			}
 
-			dispatch(isSignUp ? signUpSuccess(data) : signInSuccess(data))
-			setFormData(initialFormData)
-			navigate('/')
-
-			toast.success(
-				`Successfully ${isSignUp ? 'signed up' : 'signed in'}! Welcome ${
-					data.username || data.email
-				}`
-			)
+			if (isSignUp) {
+				dispatch(signUpSuccess())
+				setFormData(initialFormData)
+				navigate('/sign-in')
+				toast.success('Account created! Please sign in.')
+			} else {
+				dispatch(signInSuccess(data))
+				setFormData(initialFormData)
+				navigate('/')
+				toast.success(`Welcome back, ${data.username || data.email}!`)
+			}
 		} catch (error) {
 			dispatch(
 				isSignUp ? signUpFailure(error.message) : signInFailure(error.message)
@@ -78,8 +80,8 @@ const AuthForm = ({ isSignUp }) => {
 	}
 
 	return (
-		<div className="px-4 py-6 sm:px-6 max-w-lg mx-auto">
-			<h1 className="text-3xl text-center font-semibold mb-6">
+		<div className="mx-auto max-w-lg px-4 py-6 sm:px-6">
+			<h1 className="mb-6 text-center text-3xl font-semibold dark:text-white">
 				{isSignUp ? 'Sign Up' : 'Sign In'}
 			</h1>
 			<form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -87,7 +89,7 @@ const AuthForm = ({ isSignUp }) => {
 					<input
 						type="text"
 						placeholder="Username"
-						className="border p-3 rounded-lg"
+						className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 						id="username"
 						value={formData.username}
 						onChange={handleChange}
@@ -97,7 +99,7 @@ const AuthForm = ({ isSignUp }) => {
 				<input
 					type="email"
 					placeholder="Email"
-					className="border p-3 rounded-lg"
+					className="rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 					id="email"
 					value={formData.email}
 					onChange={handleChange}
@@ -107,7 +109,7 @@ const AuthForm = ({ isSignUp }) => {
 					<input
 						type={showPassword ? 'text' : 'password'}
 						placeholder="Password"
-						className="border p-3 rounded-lg w-full pr-10"
+						className="w-full rounded-lg border p-3 pr-10 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 						id="password"
 						value={formData.password}
 						onChange={handleChange}
@@ -116,7 +118,7 @@ const AuthForm = ({ isSignUp }) => {
 					<button
 						type="button"
 						onClick={() => setShowPassword(!showPassword)}
-						className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+						className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:text-slate-400"
 					>
 						{showPassword ? <FaEyeSlash /> : <FaEye />}
 					</button>
@@ -124,19 +126,19 @@ const AuthForm = ({ isSignUp }) => {
 
 				<button
 					disabled={loading}
-					className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:bg-slate-800 disabled:opacity-80"
+					className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:bg-slate-800 disabled:opacity-80 dark:bg-slate-600 dark:hover:bg-slate-500"
 				>
 					{loading ? 'Loading...' : isSignUp ? 'Sign Up' : 'Sign In'}
 				</button>
 				<OAuth />
 			</form>
-			<div className="flex flex-wrap gap-2 mt-4">
+			<div className="mt-4 flex flex-wrap gap-2 dark:text-slate-300">
 				<p>
 					{isSignUp ? 'Already have an account?' : "Don't have an account?"}
 				</p>
 				<Link
 					to={isSignUp ? '/sign-in' : '/sign-up'}
-					className="text-amber-700"
+					className="text-amber-700 dark:text-amber-500"
 				>
 					{isSignUp ? 'Sign in' : 'Sign up'}
 				</Link>

@@ -50,11 +50,11 @@ export default function Contact({ listing }) {
 				value={message}
 				onChange={onChange}
 				placeholder="Enter your message here..."
-				className="w-full border p-3 rounded-lg"
+				className="w-full rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400"
 			></textarea>
 			<Link
 				to={`mailto:${seller.email}?subject=${subject}&body=${body}`}
-				className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:bg-slate-800"
+				className="rounded-lg bg-slate-700 p-3 text-center uppercase text-white hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
 			>
 				Send Message
 			</Link>

@@ -5,22 +5,22 @@ import {
 	FaChair,
 	FaMapMarkerAlt,
 	FaParking,
-	FaShare,
+	FaPlay,
+	FaVideo,
 } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import 'swiper/css/bundle'
-import { Navigation } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
 import Contact from '../components/Contact'
-import { getListingImageUrl } from '../utils/images'
+import ImageGallery from '../components/ImageGallery'
+import MortgageCalculator from '../components/MortgageCalculator'
+import PriceHistoryChart from '../components/PriceHistoryChart'
+import ShareButton from '../components/ShareButton'
 
 export default function Listing() {
 	const [listing, setListing] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(false)
-	const [copied, setCopied] = useState(false)
 	const [contact, setContact] = useState(false)
 	const params = useParams()
 	const { currentUser } = useSelector(state => state.user)
@@ -52,73 +52,99 @@ export default function Listing() {
 		fetchListing()
 	}, [params.listingId])
 
-	const handleShareClick = () => {
-		navigator.clipboard.writeText(window.location.href)
-		setCopied(true)
-		setTimeout(() => {
-			setCopied(false)
-		}, 2000)
-	}
-
 	if (loading) {
-		return <p className="text-center my-6 text-2xl">Loading...</p>
+		return (
+			<div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+				<div className="animate-pulse space-y-4">
+					<div className="h-72 rounded-xl bg-slate-200 dark:bg-slate-700 sm:h-96" />
+					<div className="h-8 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
+					<div className="h-4 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
+					<div className="h-4 w-full rounded bg-slate-200 dark:bg-slate-700" />
+					<div className="h-4 w-5/6 rounded bg-slate-200 dark:bg-slate-700" />
+				</div>
+			</div>
+		)
 	}
 
 	if (error) {
-		return <p className="text-center my-6 text-2xl">Something went wrong!</p>
+		return (
+			<div className="flex min-h-[50vh] items-center justify-center px-4">
+				<p className="text-center text-2xl text-slate-600 dark:text-slate-400">
+					Something went wrong!
+				</p>
+			</div>
+		)
 	}
 
 	return (
 		<main>
 			{listing && (
 				<div>
-					<Swiper modules={[Navigation]} slidesPerView={1} navigation>
-						{listing.imageUrls.map(url => (
-							<SwiperSlide key={url}>
-								<div
-									className="h-[280px] w-full bg-cover bg-center sm:h-[420px] lg:h-[550px]"
-									style={{
-										backgroundImage: `url('${getListingImageUrl(url)}')`,
-									}}
-								></div>
-							</SwiperSlide>
-						))}
-					</Swiper>
-					<div className="fixed top-24 right-4 z-10 border rounded-full w-11 h-11 sm:w-12 sm:h-12 flex justify-center items-center bg-slate-100 cursor-pointer transition hover:bg-amber-100">
-						<FaShare className="text-slate-500" onClick={handleShareClick} />
+					<ImageGallery images={listing.imageUrls} />
+					<div className="fixed right-4 top-24 z-10">
+						<ShareButton title={listing.name} />
 					</div>
-					{copied && (
-						<p className="fixed top-40 right-4 z-10 rounded-md bg-slate-100 p-2 shadow-md">
-							Link copied!
-						</p>
-					)}
-					<div className="flex flex-col max-w-4xl mx-auto px-4 py-6 sm:px-6 gap-4">
-						<p className="text-2xl font-semibold">
+					<div className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-6 sm:px-6">
+						<p className="text-2xl font-semibold dark:text-white">
 							{listing.name} - $
 							{listing.offer
 								? listing.discountPrice.toLocaleString('en-US')
 								: listing.regularPrice.toLocaleString('en-US')}
 							{listing.type === 'rent' && ' / month'}
 						</p>
-						<p className="flex items-center gap-2 text-slate-600 text-sm">
+						<p className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
 							<FaMapMarkerAlt className="text-amber-600" />
 							{listing.address}
 						</p>
 						<div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
-							<p className="bg-slate-800 w-full max-w-[200px] text-white text-center p-1 rounded-md">
+							<p className="w-full max-w-[200px] rounded-md bg-slate-800 p-1 text-center text-white">
 								{listing.type === 'rent' ? 'For Rent' : 'For Sale'}
 							</p>
 							{listing.offer && (
-								<p className="bg-amber-600 w-full max-w-[200px] text-white text-center p-1 rounded-md">
+								<p className="w-full max-w-[200px] rounded-md bg-amber-600 p-1 text-center text-white">
 									${+listing.regularPrice - +listing.discountPrice} OFF
 								</p>
 							)}
 						</div>
-						<p className="text-slate-800">
-							<span className="font-semibold text-black">Description - </span>
+
+						{/* Virtual Tour Banner for Premium Listings */}
+						{listing.premium && (
+							<div className="overflow-hidden rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 p-4 shadow-lg">
+								<div className="flex items-center justify-between">
+									<div className="flex items-center gap-3">
+										<div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
+											<FaVideo className="h-6 w-6 text-white" />
+										</div>
+										<div>
+											<h3 className="font-semibold text-white">
+												Virtual Tour Available
+											</h3>
+											<p className="text-sm text-purple-200">
+												Experience this property from anywhere
+											</p>
+										</div>
+									</div>
+									<button
+										onClick={() =>
+											toast.info(
+												'Virtual tour feature coming soon! This is a demo.'
+											)
+										}
+										className="flex items-center gap-2 rounded-full bg-white px-4 py-2 font-semibold text-purple-600 transition hover:bg-purple-100"
+									>
+										<FaPlay className="h-3 w-3" />
+										Start Tour
+									</button>
+								</div>
+							</div>
+						)}
+						<p className="text-slate-800 dark:text-slate-300">
+							<span className="font-semibold text-black dark:text-white">
+								Description -{' '}
+							</span>
 							{listing.description}
 						</p>
-						<ul className="text-amber-700 font-semibold text-sm flex flex-wrap items-center gap-4">
+						<ul className="flex flex-wrap items-center gap-4 text-sm font-semibold text-amber-700 dark:text-amber-500">
 							<li className="flex items-center gap-1 whitespace-nowrap">
 								<FaBed className="text-lg" />
 								{listing.bedrooms > 1
@@ -140,10 +166,27 @@ export default function Listing() {
 								{listing.furnished ? 'Furnished' : 'Unfurnished'}
 							</li>
 						</ul>
+
+						{/* Price History Chart */}
+						<PriceHistoryChart
+							currentPrice={
+								listing.offer ? listing.discountPrice : listing.regularPrice
+							}
+							type={listing.type}
+						/>
+
+						{/* Mortgage Calculator */}
+						<MortgageCalculator
+							price={
+								listing.offer ? listing.discountPrice : listing.regularPrice
+							}
+							type={listing.type}
+						/>
+
 						{currentUser && listing.userRef !== currentUser._id && !contact && (
 							<button
 								onClick={() => setContact(true)}
-								className="bg-slate-700 text-white rounded-lg uppercase hover:bg-slate-800 p-3"
+								className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
 							>
 								Contact seller
 							</button>

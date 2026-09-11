@@ -2,14 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	color-scheme: light dark;
+}
+
+html,
+body {
+	background-color: #f1f5f9; /* slate-100 — light mode default */
+}
+
+html.dark,
+html.dark body {
+	background-color: #0f172a; /* slate-900 — dark mode */
+}
+
+/* Smooth dark/light mode transitions */
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+	transition:
+		background-color 300ms ease,
+		border-color 300ms ease,
+		color 300ms ease,
+		fill 300ms ease !important;
+}
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-}
-
-body {
-	background: rgb(248, 250, 252);
 }
 
 @keyframes riseIn {

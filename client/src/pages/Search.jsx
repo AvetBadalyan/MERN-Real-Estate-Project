@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
+import { FaList, FaMap } from 'react-icons/fa'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import EmptyState from '../components/EmptyState'
 import ListingItem from '../components/ListingItem'
+import ListingMap from '../components/ListingMap'
+import SkeletonCard from '../components/SkeletonCard'
 
 export default function Search() {
 	const navigate = useNavigate()
 	const location = useLocation()
+	const [viewMode, setViewMode] = useState('grid') // 'grid' or 'map'
 	const [sidebardata, setSidebardata] = useState({
 		searchTerm: '',
 		type: 'all',
@@ -127,7 +132,7 @@ export default function Search() {
 
 	return (
 		<div className="flex flex-col md:flex-row">
-			<div className="px-4 py-6 sm:px-6 border-b-2 md:border-r-2 md:min-h-screen md:w-80 lg:w-96">
+			<div className="border-b-2 px-4 py-6 dark:border-slate-700 dark:text-slate-300 sm:px-6 md:min-h-screen md:w-80 md:border-r-2 lg:w-96">
 				<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 					<div className="flex flex-col gap-2 sm:flex-row sm:items-center">
 						<label className="font-semibold sm:whitespace-nowrap">
@@ -137,7 +142,7 @@ export default function Search() {
 							type="text"
 							id="searchTerm"
 							placeholder="Search..."
-							className="border rounded-lg p-3 w-full"
+							className="w-full rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
 							value={sidebardata.searchTerm}
 							onChange={handleChange}
 						/>
@@ -190,7 +195,7 @@ export default function Search() {
 							</div>
 						</div>
 					</div>
-					<div className="flex gap-2 flex-wrap items-center">
+					<div className="flex flex-wrap items-center gap-2">
 						<label className="font-semibold">Amenities:</label>
 						<div className="flex gap-2">
 							<input
@@ -219,7 +224,7 @@ export default function Search() {
 							onChange={handleChange}
 							value={`${sidebardata.sort}_${sidebardata.order}`}
 							id="sort_order"
-							className="border rounded-lg p-3 w-full sm:w-auto"
+							className="w-full rounded-lg border p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white sm:w-auto"
 						>
 							<option value="regularPrice_desc">Price high to low</option>
 							<option value="regularPrice_asc">Price low to high</option>
@@ -227,39 +232,86 @@ export default function Search() {
 							<option value="createdAt_asc">Oldest</option>
 						</select>
 					</div>
-					<button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:bg-slate-800">
+					<button className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500">
 						Search
 					</button>
 				</form>
 			</div>
 			<div className="flex-1">
-				<h1 className="text-2xl sm:text-3xl font-semibold border-b px-4 py-4 sm:px-6 text-slate-700">
-					Listing results:
-				</h1>
-				<div className="px-4 py-6 sm:px-6 flex flex-wrap gap-4">
-					{!loading && listings.length === 0 && (
-						<p className="text-xl text-slate-700">No listings found!</p>
-					)}
-					{loading && (
-						<p className="text-xl text-slate-700 text-center w-full">
-							Loading...
-						</p>
-					)}
-					{!loading &&
-						listings &&
-						listings.map(listing => (
-							<ListingItem key={listing._id} listing={listing} />
-						))}
-				</div>
-				{showMore && (
-					<div className="py-8 flex justify-center">
+				<div className="flex items-center justify-between border-b px-4 py-4 dark:border-slate-700 sm:px-6">
+					<h1 className="text-2xl font-semibold text-slate-700 dark:text-white sm:text-3xl">
+						Listing results
+						{listings.length > 0 && (
+							<span className="ml-2 text-base font-normal text-slate-500 dark:text-slate-400">
+								({listings.length})
+							</span>
+						)}
+					</h1>
+					{/* View Mode Toggle */}
+					<div className="flex gap-1 rounded-lg bg-slate-200 p-1 dark:bg-slate-700">
 						<button
-							onClick={onShowMoreClick}
-							className="rounded-lg bg-slate-700 px-6 py-2 text-white transition hover:bg-slate-800"
+							onClick={() => setViewMode('grid')}
+							className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${
+								viewMode === 'grid'
+									? 'bg-white text-slate-800 shadow dark:bg-slate-600 dark:text-white'
+									: 'text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
+							}`}
 						>
-							Show more
+							<FaList className="h-4 w-4" />
+							<span className="hidden sm:inline">Grid</span>
+						</button>
+						<button
+							onClick={() => setViewMode('map')}
+							className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${
+								viewMode === 'map'
+									? 'bg-white text-slate-800 shadow dark:bg-slate-600 dark:text-white'
+									: 'text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
+							}`}
+						>
+							<FaMap className="h-4 w-4" />
+							<span className="hidden sm:inline">Map</span>
 						</button>
 					</div>
+				</div>
+
+				{viewMode === 'map' ? (
+					<div className="p-4 sm:p-6">
+						<ListingMap listings={listings} height="calc(100vh - 200px)" />
+					</div>
+				) : (
+					<>
+						<div className="flex flex-wrap gap-4 px-4 py-6 sm:px-6">
+							{!loading && listings.length === 0 && (
+								<EmptyState
+									title="No listings found"
+									message="We couldn't find any properties matching your criteria. Try adjusting your filters or search term."
+									showBrowseButton={false}
+								/>
+							)}
+							{loading && (
+								<>
+									{[...Array(8)].map((_, i) => (
+										<SkeletonCard key={i} />
+									))}
+								</>
+							)}
+							{!loading &&
+								listings &&
+								listings.map(listing => (
+									<ListingItem key={listing._id} listing={listing} />
+								))}
+						</div>
+						{showMore && (
+							<div className="flex justify-center py-8">
+								<button
+									onClick={onShowMoreClick}
+									className="rounded-lg bg-slate-700 px-6 py-2 text-white transition hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
+								>
+									Show more
+								</button>
+							</div>
+						)}
+					</>
 				)}
 			</div>
 		</div>
