@@ -1,13 +1,21 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 const CompareContext = createContext()
 
 const MAX_COMPARE = 3
+const STORAGE_KEY = 'avets-estate-compare'
 
 export function CompareProvider({ children }) {
-	const [compareList, setCompareList] = useState([])
+	const [compareList, setCompareList] = useState(() => {
+		const stored = localStorage.getItem(STORAGE_KEY)
+		return stored ? JSON.parse(stored) : []
+	})
+
+	useEffect(() => {
+		localStorage.setItem(STORAGE_KEY, JSON.stringify(compareList))
+	}, [compareList])
 
 	const addToCompare = listing => {
 		if (compareList.length >= MAX_COMPARE) {

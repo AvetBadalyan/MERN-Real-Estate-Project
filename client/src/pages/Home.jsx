@@ -108,9 +108,9 @@ export default function Home() {
 				])
 
 				setListings({
-					offer: offerData,
-					rent: rentData,
-					sale: saleData,
+					offer: Array.isArray(offerData) ? offerData : [],
+					rent: Array.isArray(rentData) ? rentData : [],
+					sale: Array.isArray(saleData) ? saleData : [],
 				})
 			} catch (error) {
 				console.error('Failed to fetch listings:', error)
