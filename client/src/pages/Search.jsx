@@ -1,17 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
-import { FaMap, FaThLarge } from 'react-icons/fa'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import EmptyState from '../components/EmptyState'
 import ListingItem from '../components/ListingItem'
-import ListingMap from '../components/ListingMap'
 import SkeletonCard from '../components/SkeletonCard'
 import { countries, getCitiesForCountry } from '../utils/countries'
 
 export default function Search() {
 	const navigate = useNavigate()
 	const location = useLocation()
-	const [viewMode, setViewMode] = useState('grid') // 'grid' or 'map'
 	const [availableCities, setAvailableCities] = useState([])
 	const [sidebardata, setSidebardata] = useState({
 		searchTerm: '',
@@ -302,7 +299,7 @@ export default function Search() {
 				</form>
 			</div>
 			<div className="flex-1">
-				<div className="flex items-center justify-between border-b px-4 py-4 dark:border-slate-700 sm:px-6">
+				<div className="border-b px-4 py-4 dark:border-slate-700 sm:px-6">
 					<h1 className="text-2xl font-semibold text-slate-700 dark:text-white sm:text-3xl">
 						Listing results
 						{listings.length > 0 && (
@@ -311,71 +308,38 @@ export default function Search() {
 							</span>
 						)}
 					</h1>
-					{/* View Mode Toggle */}
-					<div className="flex gap-1 rounded-lg bg-slate-200 p-1 dark:bg-slate-700">
-						<button
-							onClick={() => setViewMode('grid')}
-							className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${
-								viewMode === 'grid'
-									? 'bg-white text-slate-800 shadow dark:bg-slate-600 dark:text-white'
-									: 'text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
-							}`}
-						>
-							<FaThLarge className="h-4 w-4" />
-							<span className="hidden sm:inline">Grid</span>
-						</button>
-						<button
-							onClick={() => setViewMode('map')}
-							className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${
-								viewMode === 'map'
-									? 'bg-white text-slate-800 shadow dark:bg-slate-600 dark:text-white'
-									: 'text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
-							}`}
-						>
-							<FaMap className="h-4 w-4" />
-							<span className="hidden sm:inline">Map</span>
-						</button>
-					</div>
 				</div>
 
-				{viewMode === 'map' ? (
-					<div className="p-4 sm:p-6">
-						<ListingMap listings={listings} height="calc(100vh - 200px)" />
+				<div className="flex flex-wrap gap-4 px-4 py-6 sm:px-6">
+					{!loading && listings.length === 0 && (
+						<EmptyState
+							title="No listings found"
+							message="We couldn't find any properties matching your criteria. Try adjusting your filters or search term."
+							showBrowseButton={false}
+						/>
+					)}
+					{loading && (
+						<>
+							{[...Array(8)].map((_, i) => (
+								<SkeletonCard key={i} />
+							))}
+						</>
+					)}
+					{!loading &&
+						listings &&
+						listings.map(listing => (
+							<ListingItem key={listing._id} listing={listing} />
+						))}
+				</div>
+				{showMore && (
+					<div className="flex justify-center py-8">
+						<button
+							onClick={onShowMoreClick}
+							className="rounded-lg bg-slate-700 px-6 py-2 text-white transition hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
+						>
+							Show more
+						</button>
 					</div>
-				) : (
-					<>
-						<div className="flex flex-wrap gap-4 px-4 py-6 sm:px-6">
-							{!loading && listings.length === 0 && (
-								<EmptyState
-									title="No listings found"
-									message="We couldn't find any properties matching your criteria. Try adjusting your filters or search term."
-									showBrowseButton={false}
-								/>
-							)}
-							{loading && (
-								<>
-									{[...Array(8)].map((_, i) => (
-										<SkeletonCard key={i} />
-									))}
-								</>
-							)}
-							{!loading &&
-								listings &&
-								listings.map(listing => (
-									<ListingItem key={listing._id} listing={listing} />
-								))}
-						</div>
-						{showMore && (
-							<div className="flex justify-center py-8">
-								<button
-									onClick={onShowMoreClick}
-									className="rounded-lg bg-slate-700 px-6 py-2 text-white transition hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
-								>
-									Show more
-								</button>
-							</div>
-						)}
-					</>
 				)}
 			</div>
 		</div>

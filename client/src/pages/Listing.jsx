@@ -111,17 +111,29 @@ export default function Listing() {
 								</span>
 							)}
 						</p>
-						<p className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+						<a
+							href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+								listing.city && listing.country
+									? `${listing.address}, ${listing.city}, ${listing.country}`
+									: listing.address
+							)}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="flex items-center gap-2 text-sm text-slate-600 transition hover:text-amber-600 dark:text-slate-400 dark:hover:text-amber-400"
+							title="View on Google Maps"
+						>
 							<FaMapMarkerAlt className="shrink-0 text-amber-600" />
 							{listing.city && listing.country ? (
-								<span>
+								<span className="underline decoration-dotted underline-offset-2">
 									{listing.address}, {listing.city},{' '}
 									{getFlagForCountry(listing.country)} {listing.country}
 								</span>
 							) : (
-								listing.address
+								<span className="underline decoration-dotted underline-offset-2">
+									{listing.address}
+								</span>
 							)}
-						</p>
+						</a>
 						<div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
 							<p className="w-full max-w-[200px] rounded-md bg-slate-800 p-1 text-center text-white">
 								{listing.type === 'rent' ? 'For Rent' : 'For Sale'}
