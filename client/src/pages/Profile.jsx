@@ -221,7 +221,7 @@ export default function Profile() {
 					placeholder="Username"
 					id="username"
 					defaultValue={currentUser.username}
-					className="rounded-lg border border-slate-300 p-3 text-slate-800 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+					className="form-input"
 					onChange={handleChange}
 				/>
 				<input
@@ -229,7 +229,7 @@ export default function Profile() {
 					placeholder="Email"
 					id="email"
 					defaultValue={currentUser.email}
-					className="rounded-lg border border-slate-300 p-3 text-slate-800 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+					className="form-input"
 					onChange={handleChange}
 				/>
 				<div className="relative">
@@ -237,7 +237,7 @@ export default function Profile() {
 						type={showPassword ? 'text' : 'password'}
 						placeholder="New password (leave blank to keep current)"
 						id="password"
-						className="w-full rounded-lg border border-slate-300 p-3 pr-10 text-slate-800 placeholder-slate-400 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+						className="form-input w-full pr-10"
 						onChange={handleChange}
 					/>
 					<button

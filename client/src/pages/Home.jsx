@@ -14,12 +14,11 @@ import { Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import ListingItem from '../components/ListingItem'
 import SkeletonCard from '../components/SkeletonCard'
-import { getListingImageUrl } from '../utils/images'
+import { getListingImageUrl, HERO_IMAGE } from '../utils/images'
 
 SwiperCore.use([Navigation])
 
-const heroImage =
-	'https://res.cloudinary.com/dkaknfwcl/image/upload/v1789063531/avets-estate/ixodcblawsxjfc2c0vmj.png'
+const heroImage = HERO_IMAGE
 
 const quickLinks = [
 	{ label: 'Buy', to: '/search?type=sale', icon: FaHome },

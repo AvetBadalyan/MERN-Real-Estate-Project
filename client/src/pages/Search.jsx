@@ -6,14 +6,18 @@ import EmptyState from '../components/EmptyState'
 import ListingItem from '../components/ListingItem'
 import ListingMap from '../components/ListingMap'
 import SkeletonCard from '../components/SkeletonCard'
+import { countries, getCitiesForCountry } from '../utils/countries'
 
 export default function Search() {
 	const navigate = useNavigate()
 	const location = useLocation()
 	const [viewMode, setViewMode] = useState('grid') // 'grid' or 'map'
+	const [availableCities, setAvailableCities] = useState([])
 	const [sidebardata, setSidebardata] = useState({
 		searchTerm: '',
 		type: 'all',
+		country: '',
+		city: '',
 		parking: false,
 		furnished: false,
 		offer: false,
@@ -42,6 +46,8 @@ export default function Search() {
 		const params = getParams([
 			'searchTerm',
 			'type',
+			'country',
+			'city',
 			'parking',
 			'furnished',
 			'offer',
@@ -49,9 +55,21 @@ export default function Search() {
 			'order',
 		])
 
+		const country = params.country || ''
+		const city = params.city || ''
+
+		// Update available cities if country is set
+		if (country) {
+			setAvailableCities(getCitiesForCountry(country))
+		} else {
+			setAvailableCities([])
+		}
+
 		setSidebardata({
 			searchTerm: params.searchTerm || '',
 			type: params.type || 'all',
+			country,
+			city,
 			parking: params.parking === 'true',
 			furnished: params.furnished === 'true',
 			offer: params.offer === 'true',
@@ -100,6 +118,11 @@ export default function Search() {
 					order: order || 'desc',
 				}
 			}
+			if (id === 'country') {
+				// When country changes, reset city and update available cities
+				setAvailableCities(value ? getCitiesForCountry(value) : [])
+				return { ...prevData, country: value, city: '' }
+			}
 			return { ...prevData, [id]: value }
 		})
 	}, [])
@@ -142,11 +165,53 @@ export default function Search() {
 							type="text"
 							id="searchTerm"
 							placeholder="Search..."
-							className="w-full rounded-lg border border-slate-300 p-3 text-slate-800 placeholder-slate-400 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400"
+							className="form-input-inset w-full"
 							value={sidebardata.searchTerm}
 							onChange={handleChange}
 						/>
 					</div>
+
+					{/* Country Filter */}
+					<div className="flex flex-col gap-2">
+						<label className="font-semibold text-slate-800 dark:text-slate-200">
+							Country:
+						</label>
+						<select
+							id="country"
+							value={sidebardata.country}
+							onChange={handleChange}
+							className="form-input-inset w-full"
+						>
+							<option value="">All Countries</option>
+							{countries.map(c => (
+								<option key={c.code} value={c.name}>
+									{c.flag} {c.name}
+								</option>
+							))}
+						</select>
+					</div>
+
+					{/* City Filter */}
+					{availableCities.length > 0 && (
+						<div className="flex flex-col gap-2">
+							<label className="font-semibold text-slate-800 dark:text-slate-200">
+								City:
+							</label>
+							<select
+								id="city"
+								value={sidebardata.city}
+								onChange={handleChange}
+								className="form-input-inset w-full"
+							>
+								<option value="">All Cities</option>
+								{availableCities.map(city => (
+									<option key={city} value={city}>
+										{city}
+									</option>
+								))}
+							</select>
+						</div>
+					)}
 					<div className="flex flex-col gap-3">
 						<label className="font-semibold text-slate-800 dark:text-slate-200">
 							Type:
@@ -230,7 +295,7 @@ export default function Search() {
 							onChange={handleChange}
 							value={`${sidebardata.sort}_${sidebardata.order}`}
 							id="sort_order"
-							className="w-full rounded-lg border border-slate-300 p-3 text-slate-800 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white sm:w-auto"
+							className="form-input-inset w-full sm:w-auto"
 						>
 							<option value="regularPrice_desc">Price high to low</option>
 							<option value="regularPrice_asc">Price low to high</option>

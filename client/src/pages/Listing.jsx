@@ -17,6 +17,7 @@ import ImageGallery from '../components/ImageGallery'
 import MortgageCalculator from '../components/MortgageCalculator'
 import PriceHistoryChart from '../components/PriceHistoryChart'
 import ShareButton from '../components/ShareButton'
+import { getFlagForCountry } from '../utils/countries'
 
 export default function Listing() {
 	const [listing, setListing] = useState(null)
@@ -112,8 +113,15 @@ export default function Listing() {
 							)}
 						</p>
 						<p className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-							<FaMapMarkerAlt className="text-amber-600" />
-							{listing.address}
+							<FaMapMarkerAlt className="shrink-0 text-amber-600" />
+							{listing.city && listing.country ? (
+								<span>
+									{listing.address}, {listing.city},{' '}
+									{getFlagForCountry(listing.country)} {listing.country}
+								</span>
+							) : (
+								listing.address
+							)}
 						</p>
 						<div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
 							<p className="w-full max-w-[200px] rounded-md bg-slate-800 p-1 text-center text-white">

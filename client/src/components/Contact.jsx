@@ -61,7 +61,7 @@ export default function Contact({ listing }) {
 				value={message}
 				onChange={onChange}
 				placeholder="Enter your message here..."
-				className="w-full rounded-lg border border-slate-300 p-3 text-slate-800 placeholder-slate-400 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+				className="form-input w-full"
 			/>
 			<Link
 				to={`mailto:${seller.email}?subject=${subject}&body=${body}`}

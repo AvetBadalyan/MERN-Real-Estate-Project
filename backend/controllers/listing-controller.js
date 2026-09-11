@@ -106,14 +106,27 @@ export const getListings = async (req, res, next) => {
 
 		const order = req.query.order || 'desc'
 
-		const listings = await Listing.find({
+		// Build query object
+		const query = {
 			name: { $regex: searchTerm, $options: 'i' },
 			offer,
 			furnished,
 			parking,
 			premium,
 			type,
-		})
+		}
+
+		// Add country filter if provided
+		if (req.query.country && req.query.country !== '') {
+			query.country = req.query.country
+		}
+
+		// Add city filter if provided
+		if (req.query.city && req.query.city !== '') {
+			query.city = req.query.city
+		}
+
+		const listings = await Listing.find(query)
 			.sort({ [sort]: order })
 			.limit(limit)
 			.skip(startIndex)

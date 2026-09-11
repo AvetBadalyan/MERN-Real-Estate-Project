@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useCompare } from '../context/CompareContext'
 import { useFavorites } from '../context/FavoritesContext'
+import { getFlagForCountry } from '../utils/countries'
 import { getListingImageUrl } from '../utils/images'
 
 export default function ListingItem({
@@ -17,6 +18,8 @@ export default function ListingItem({
 		imageUrls,
 		name,
 		address,
+		country,
+		city,
 		description,
 		offer,
 		discountPrice,
@@ -28,6 +31,7 @@ export default function ListingItem({
 	} = listing
 
 	const listingImage = getListingImageUrl(imageUrls[0])
+	const countryFlag = getFlagForCountry(country)
 
 	const price = offer ? discountPrice : regularPrice
 	const formattedPrice = price.toLocaleString('en-US')
@@ -111,9 +115,15 @@ export default function ListingItem({
 						{name}
 					</p>
 					<div className="flex items-center gap-1">
-						<MdLocationOn className="h-4 w-4 text-amber-600" />
-						<p className="w-full truncate text-sm text-slate-600 dark:text-slate-300">
-							{address}
+						<MdLocationOn className="h-4 w-4 shrink-0 text-amber-600" />
+						<p className="truncate text-sm text-slate-600 dark:text-slate-300">
+							{city && country ? (
+								<>
+									{city}, {countryFlag} {country}
+								</>
+							) : (
+								address
+							)}
 						</p>
 					</div>
 					<p className="line-clamp-2 text-sm text-slate-600 dark:text-slate-300">

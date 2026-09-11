@@ -89,7 +89,7 @@ const AuthForm = ({ isSignUp }) => {
 					<input
 						type="text"
 						placeholder="Username"
-						className="rounded-lg border border-slate-300 p-3 text-slate-800 placeholder-slate-400 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+						className="form-input"
 						id="username"
 						value={formData.username}
 						onChange={handleChange}
@@ -99,7 +99,7 @@ const AuthForm = ({ isSignUp }) => {
 				<input
 					type="email"
 					placeholder="Email"
-					className="rounded-lg border border-slate-300 p-3 text-slate-800 placeholder-slate-400 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+					className="form-input"
 					id="email"
 					value={formData.email}
 					onChange={handleChange}
@@ -109,7 +109,7 @@ const AuthForm = ({ isSignUp }) => {
 					<input
 						type={showPassword ? 'text' : 'password'}
 						placeholder="Password"
-						className="w-full rounded-lg border border-slate-300 p-3 pr-10 text-slate-800 placeholder-slate-400 focus:border-slate-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+						className="form-input w-full pr-10"
 						id="password"
 						value={formData.password}
 						onChange={handleChange}
