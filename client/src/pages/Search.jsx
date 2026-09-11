@@ -158,7 +158,7 @@ export default function Search() {
 			<div className="border-b-2 bg-white px-4 py-6 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 sm:px-6 md:min-h-screen md:w-80 md:border-b-0 md:border-r-2 lg:w-96">
 				<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 					<div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-						<label className="font-semibold text-slate-800 dark:text-slate-200 sm:whitespace-nowrap">
+						<label className="form-label sm:whitespace-nowrap">
 							Search Term:
 						</label>
 						<input
@@ -173,9 +173,7 @@ export default function Search() {
 
 					{/* Country Filter */}
 					<div className="flex flex-col gap-2">
-						<label className="font-semibold text-slate-800 dark:text-slate-200">
-							Country:
-						</label>
+						<label className="form-label">Country:</label>
 						<select
 							id="country"
 							value={sidebardata.country}
@@ -194,9 +192,7 @@ export default function Search() {
 					{/* City Filter */}
 					{availableCities.length > 0 && (
 						<div className="flex flex-col gap-2">
-							<label className="font-semibold text-slate-800 dark:text-slate-200">
-								City:
-							</label>
+							<label className="form-label">City:</label>
 							<select
 								id="city"
 								value={sidebardata.city}
@@ -213,9 +209,7 @@ export default function Search() {
 						</div>
 					)}
 					<div className="flex flex-col gap-3">
-						<label className="font-semibold text-slate-800 dark:text-slate-200">
-							Type:
-						</label>
+						<label className="form-label">Type:</label>
 						<div className="flex flex-wrap gap-3 text-slate-700 dark:text-slate-300">
 							<div className="flex gap-2">
 								<input
@@ -250,22 +244,10 @@ export default function Search() {
 								/>
 								<span>Sale</span>
 							</div>
-							<div className="flex gap-2">
-								<input
-									type="checkbox"
-									id="offer"
-									className="w-5"
-									onChange={handleChange}
-									checked={sidebardata.offer}
-								/>
-								<span>Offer</span>
-							</div>
 						</div>
 					</div>
 					<div className="flex flex-wrap items-center gap-2 text-slate-700 dark:text-slate-300">
-						<label className="font-semibold text-slate-800 dark:text-slate-200">
-							Amenities:
-						</label>
+						<label className="form-label w-full">Amenities:</label>
 						<div className="flex gap-2">
 							<input
 								type="checkbox"
@@ -286,11 +268,19 @@ export default function Search() {
 							/>
 							<span>Furnished</span>
 						</div>
+						<div className="flex gap-2">
+							<input
+								type="checkbox"
+								id="offer"
+								className="w-5"
+								onChange={handleChange}
+								checked={sidebardata.offer}
+							/>
+							<span>Has Offer</span>
+						</div>
 					</div>
 					<div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-						<label className="font-semibold text-slate-800 dark:text-slate-200">
-							Sort:
-						</label>
+						<label className="form-label">Sort:</label>
 						<select
 							onChange={handleChange}
 							value={`${sidebardata.sort}_${sidebardata.order}`}
@@ -303,7 +293,10 @@ export default function Search() {
 							<option value="createdAt_asc">Oldest</option>
 						</select>
 					</div>
-					<button className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500">
+					<button
+						type="submit"
+						className="rounded-lg bg-slate-700 p-3 font-semibold uppercase text-white transition hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
+					>
 						Search
 					</button>
 				</form>

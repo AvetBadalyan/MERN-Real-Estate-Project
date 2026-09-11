@@ -52,7 +52,13 @@ export default function Compare() {
 			icon: FaCouch,
 			format: l => (l.furnished ? 'Yes' : 'No'),
 		},
-		{ key: 'address', label: 'Location', icon: MdLocationOn },
+		{
+			key: 'location',
+			label: 'Location',
+			icon: MdLocationOn,
+			format: l =>
+				l.city && l.country ? `${l.city}, ${l.country}` : l.address,
+		},
 	]
 
 	return (

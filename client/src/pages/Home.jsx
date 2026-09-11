@@ -264,7 +264,10 @@ export default function Home() {
 														{listing.name}
 													</h3>
 													<p className="mt-2 flex items-center gap-2 text-sm text-slate-100">
-														<FaMapMarkerAlt /> {listing.address}
+														<FaMapMarkerAlt />
+														{listing.city && listing.country
+															? `${listing.city}, ${listing.country}`
+															: listing.address}
 													</p>
 												</div>
 											</div>

@@ -291,9 +291,9 @@ export default function Profile() {
 
 			{userListings && userListings.length > 0 && (
 				<div className="flex flex-col gap-4">
-					<h1 className="mt-6 text-center text-2xl font-semibold dark:text-white">
+					<h2 className="mt-6 text-center text-2xl font-semibold dark:text-white">
 						Your Listings
-					</h1>
+					</h2>
 					{userListings.map(listing => (
 						<div
 							key={listing._id}

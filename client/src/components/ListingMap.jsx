@@ -17,20 +17,6 @@ L.Icon.Default.mergeOptions({
 		'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
 })
 
-// Custom marker icon
-const customIcon = new L.Icon({
-	iconUrl:
-		'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-	iconRetinaUrl:
-		'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-	shadowUrl:
-		'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-	iconSize: [25, 41],
-	iconAnchor: [12, 41],
-	popupAnchor: [1, -34],
-	shadowSize: [41, 41],
-})
-
 // Mock coordinates for demo - in production you'd geocode addresses
 function getMockCoordinates(listing) {
 	// Generate consistent coordinates based on listing ID
@@ -109,11 +95,7 @@ export default function ListingMap({ listings, height = '400px' }) {
 						? listing.discountPrice
 						: listing.regularPrice
 					return (
-						<Marker
-							key={listing._id}
-							position={[coords.lat, coords.lng]}
-							icon={customIcon}
-						>
+						<Marker key={listing._id} position={[coords.lat, coords.lng]}>
 							<Popup>
 								<div className="w-48">
 									<Link to={`/listing/${listing._id}`}>
