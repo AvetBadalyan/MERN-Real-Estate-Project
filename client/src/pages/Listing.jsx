@@ -183,9 +183,19 @@ export default function Listing() {
 							type={listing.type}
 						/>
 
-						{currentUser && listing.userRef !== currentUser._id && !contact && (
+						{!contact && (
 							<button
-								onClick={() => setContact(true)}
+								onClick={() => {
+									if (!currentUser) {
+										toast.info('Please sign in to contact the seller')
+										return
+									}
+									if (listing.userRef === currentUser._id) {
+										toast.info("You can't contact yourself!")
+										return
+									}
+									setContact(true)
+								}}
 								className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
 							>
 								Contact seller
