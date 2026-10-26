@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
 	FaCheck,
 	FaEnvelope,
@@ -14,6 +14,16 @@ import { toast } from 'react-toastify'
 export default function ShareButton({ title, url }) {
 	const [isOpen, setIsOpen] = useState(false)
 	const [copied, setCopied] = useState(false)
+
+	// Close the share popover on Escape while it's open.
+	useEffect(() => {
+		if (!isOpen) return
+		const onKeyDown = e => {
+			if (e.key === 'Escape') setIsOpen(false)
+		}
+		document.addEventListener('keydown', onKeyDown)
+		return () => document.removeEventListener('keydown', onKeyDown)
+	}, [isOpen])
 
 	const shareUrl = url || window.location.href
 	const shareTitle = title || 'Check out this property!'
@@ -99,16 +109,23 @@ export default function ShareButton({ title, url }) {
 					<div
 						className="fixed inset-0 z-40 bg-black/20"
 						onClick={() => setIsOpen(false)}
+						aria-hidden="true"
 					/>
 
 					{/* Modal */}
-					<div className="absolute right-0 top-14 z-50 w-64 rounded-xl bg-white p-4 shadow-xl dark:bg-slate-800">
+					<div
+						className="absolute right-0 top-14 z-50 w-64 rounded-xl bg-white p-4 shadow-xl dark:bg-slate-800"
+						role="dialog"
+						aria-modal="true"
+						aria-label="Share property"
+					>
 						<div className="mb-3 flex items-center justify-between">
 							<h3 className="font-semibold text-slate-800 dark:text-white">
 								Share Property
 							</h3>
 							<button
 								onClick={() => setIsOpen(false)}
+								aria-label="Close share menu"
 								className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
 							>
 								<FaTimes />

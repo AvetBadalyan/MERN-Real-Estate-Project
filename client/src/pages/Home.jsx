@@ -8,15 +8,12 @@ import {
 } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import SwiperCore from 'swiper'
 import 'swiper/css/bundle'
 import { Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import ListingItem from '../components/ListingItem'
 import SkeletonCard from '../components/SkeletonCard'
 import { getListingImageUrl, HERO_IMAGE } from '../utils/images'
-
-SwiperCore.use([Navigation])
 
 const heroImage = HERO_IMAGE
 
@@ -124,10 +121,19 @@ export default function Home() {
 
 	return (
 		<div className="overflow-hidden bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200">
-			<section
-				className="relative min-h-[540px] bg-cover bg-center px-4 py-10 sm:px-6 lg:min-h-[600px] lg:py-16"
-				style={{ backgroundImage: `url('${heroImage}')` }}
-			>
+			<section className="relative min-h-[540px] px-4 py-10 sm:px-6 lg:min-h-[600px] lg:py-16">
+				{/* Real <img> (not a CSS background) so the browser can discover and
+				    prioritize the LCP image. */}
+				<img
+					src={heroImage}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					onError={e => {
+						e.currentTarget.style.display = 'none'
+					}}
+					className="absolute inset-0 h-full w-full bg-slate-700 object-cover"
+				/>
 				<div className="absolute inset-0 bg-slate-950/45"></div>
 				<div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-10 text-white">
 					<div className="animate-rise max-w-3xl pt-6 sm:pt-10">
@@ -160,7 +166,7 @@ export default function Home() {
 								className="group flex items-center justify-between rounded-md bg-white/90 px-4 py-4 text-slate-800 shadow-lg backdrop-blur transition hover:-translate-y-1 hover:bg-white"
 							>
 								<span className="flex items-center gap-3 font-semibold">
-									<span className="rounded-md bg-amber-600 p-2 text-white">
+									<span className="rounded-md bg-amber-700 p-2 text-white">
 										<Icon />
 									</span>
 									{label}
@@ -243,22 +249,25 @@ export default function Home() {
 							</Link>
 						</div>
 						<div className="overflow-hidden rounded-md shadow-xl">
-							<Swiper navigation>
+							<Swiper modules={[Navigation]} navigation>
 								{listings.offer.map(listing => (
 									<SwiperSlide key={listing._id}>
 										<Link to={`/listing/${listing._id}`} className="block">
 											<div
 												style={{
 													backgroundImage: `url('${getListingImageUrl(
-														listing.imageUrls[0]
+														listing.imageUrls?.[0]
 													)}')`,
 												}}
-												className="relative h-[360px] bg-cover bg-center sm:h-[460px]"
+												className="relative h-[360px] bg-slate-200 bg-cover bg-center dark:bg-slate-700 sm:h-[460px]"
 											>
 												<div className="absolute inset-0 bg-slate-950/35"></div>
 												<div className="absolute bottom-0 left-0 right-0 p-4 text-white sm:p-6">
-													<p className="mb-2 inline-flex rounded-md bg-amber-600 px-3 py-1 text-sm font-semibold">
-														${listing.discountPrice.toLocaleString('en-US')}
+													<p className="mb-2 inline-flex rounded-md bg-amber-800 px-3 py-1 text-sm font-semibold text-white">
+														$
+														{(
+															listing.discountPrice ?? listing.regularPrice
+														).toLocaleString('en-US')}
 													</p>
 													<h3 className="max-w-2xl text-2xl font-semibold sm:text-4xl">
 														{listing.name}

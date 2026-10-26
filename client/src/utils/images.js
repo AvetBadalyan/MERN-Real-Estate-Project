@@ -1,25 +1,51 @@
-// Cloudinary account used for the app's static/fallback assets.
-// Falls back to the project's cloud name so builds work without the env var set.
-const CLOUDINARY_CLOUD_NAME =
-	import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dkaknfwcl'
+import placeholderAvatar from '../assets/placeholder-avatar.svg'
+import placeholderListing from '../assets/placeholder-listing.svg'
 
-const CLOUDINARY_BASE = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload`
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dkaknfwcl'
+const BASE_URL = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload`
 
-export const HERO_IMAGE = `${CLOUDINARY_BASE}/v1789063531/avets-estate/ixodcblawsxjfc2c0vmj.png`
+export const FALLBACK_LISTING_IMAGE = placeholderListing
+export const FALLBACK_AVATAR_IMAGE = placeholderAvatar
 
-const FALLBACK_LISTING_IMAGE = `${CLOUDINARY_BASE}/v1789063532/avets-estate/fnxl0vhkyq6zv5cm09sg.jpg`
-
-export const FALLBACK_AVATAR_IMAGE = `${CLOUDINARY_BASE}/v1789063533/avets-estate/jmk8vydzrnzx7uvfbqr9.svg`
-
-export const getListingImageUrl = (
-	imageUrl,
-	fallback = FALLBACK_LISTING_IMAGE
-) => {
-	if (!imageUrl) return fallback
-	return imageUrl
+// Cloudinary lets you add transform parameters right inside the URL path.
+// Inserting f_auto,q_auto,w_X after /upload/ tells Cloudinary to:
+//   f_auto → serve WebP or AVIF instead of JPEG/PNG (smaller file, same quality)
+//   q_auto → let Cloudinary pick the best quality level automatically
+//   w_X    → resize to the given width so we don't download a 4K image for a card
+function withTransforms(url, width = 800) {
+	if (!url || typeof url !== 'string') return url
+	if (!url.includes('res.cloudinary.com') || !url.includes('/upload/')) return url
+	if (url.includes('f_auto')) return url // transforms already added, skip
+	return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width}/`)
 }
 
-export const getAvatarImageUrl = imageUrl => {
-	if (!imageUrl) return FALLBACK_AVATAR_IMAGE
-	return imageUrl
+// The hero image on the home page — extra wide because it fills the screen.
+export const HERO_IMAGE = withTransforms(
+	`${BASE_URL}/avets-estate/ixodcblawsxjfc2c0vmj.png`,
+	1600
+)
+
+export function getListingImageUrl(url, fallback = FALLBACK_LISTING_IMAGE, width = 800) {
+	if (!url) return fallback
+	return withTransforms(url, width)
+}
+
+export function getAvatarImageUrl(url) {
+	if (!url) return FALLBACK_AVATAR_IMAGE
+	return withTransforms(url, 160)
+}
+
+// onError handler for <img> elements.
+// If the image fails to load, swap in the local SVG fallback.
+// The src check prevents an infinite loop if the fallback itself ever fails.
+export function handleListingImageError(e) {
+	if (e.currentTarget.src !== FALLBACK_LISTING_IMAGE) {
+		e.currentTarget.src = FALLBACK_LISTING_IMAGE
+	}
+}
+
+export function handleAvatarImageError(e) {
+	if (e.currentTarget.src !== FALLBACK_AVATAR_IMAGE) {
+		e.currentTarget.src = FALLBACK_AVATAR_IMAGE
+	}
 }

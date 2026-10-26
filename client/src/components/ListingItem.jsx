@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { useCompare } from '../context/CompareContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { getFlagForCountry } from '../utils/countries'
-import { getListingImageUrl } from '../utils/images'
+import { getListingImageUrl, handleListingImageError } from '../utils/images'
 
 export default function ListingItem({
 	listing,
@@ -30,7 +30,7 @@ export default function ListingItem({
 		premium,
 	} = listing
 
-	const listingImage = getListingImageUrl(imageUrls[0])
+	const listingImage = getListingImageUrl(imageUrls?.[0], undefined, 500)
 	const countryFlag = getFlagForCountry(country)
 
 	const price = offer ? discountPrice : regularPrice
@@ -70,7 +70,9 @@ export default function ListingItem({
 				<div className="relative overflow-hidden">
 					<img
 						src={listingImage}
-						alt="listing cover"
+						alt={name}
+						loading="lazy"
+						onError={handleListingImageError}
 						className="h-[280px] w-full object-cover transition-transform duration-500 group-hover:scale-110 sm:h-[220px]"
 					/>
 					<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -99,7 +101,7 @@ export default function ListingItem({
 						<MdCompareArrows className="h-5 w-5" />
 					</button>
 					{offer && (
-						<span className="absolute left-3 top-3 rounded-full bg-amber-600 px-3 py-1 text-xs font-semibold text-white shadow-lg">
+						<span className="absolute left-3 top-3 rounded-full bg-amber-800 px-3 py-1 text-xs font-semibold text-white shadow-lg">
 							Special Offer
 						</span>
 					)}

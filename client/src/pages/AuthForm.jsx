@@ -47,6 +47,7 @@ const AuthForm = ({ isSignUp }) => {
 		try {
 			const res = await fetch(endpoint, {
 				method: 'POST',
+				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
 				},
@@ -54,7 +55,7 @@ const AuthForm = ({ isSignUp }) => {
 			})
 			const data = await res.json()
 
-			if (data.success === false) {
+			if (!res.ok || data.success === false) {
 				dispatch(
 					isSignUp ? signUpFailure(data.message) : signInFailure(data.message)
 				)
@@ -86,31 +87,48 @@ const AuthForm = ({ isSignUp }) => {
 			</h1>
 			<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 				{isSignUp && (
-					<input
-						type="text"
-						placeholder="Username"
-						className="form-input"
-						id="username"
-						value={formData.username}
-						onChange={handleChange}
-						required
-					/>
+					<>
+						<label htmlFor="username" className="sr-only">
+							Username
+						</label>
+						<input
+							type="text"
+							placeholder="Username"
+							className="form-input"
+							id="username"
+							name="username"
+							autoComplete="username"
+							value={formData.username}
+							onChange={handleChange}
+							required
+						/>
+					</>
 				)}
+				<label htmlFor="email" className="sr-only">
+					Email
+				</label>
 				<input
 					type="email"
 					placeholder="Email"
 					className="form-input"
 					id="email"
+					name="email"
+					autoComplete="email"
 					value={formData.email}
 					onChange={handleChange}
 					required
 				/>
 				<div className="relative">
+					<label htmlFor="password" className="sr-only">
+						Password
+					</label>
 					<input
 						type={showPassword ? 'text' : 'password'}
 						placeholder="Password"
 						className="form-input w-full pr-10"
 						id="password"
+						name="password"
+						autoComplete={isSignUp ? 'new-password' : 'current-password'}
 						value={formData.password}
 						onChange={handleChange}
 						required
@@ -118,6 +136,7 @@ const AuthForm = ({ isSignUp }) => {
 					<button
 						type="button"
 						onClick={() => setShowPassword(!showPassword)}
+						aria-label={showPassword ? 'Hide password' : 'Show password'}
 						className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:text-slate-400"
 					>
 						{showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -125,6 +144,7 @@ const AuthForm = ({ isSignUp }) => {
 				</div>
 
 				<button
+					type="submit"
 					disabled={loading}
 					className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:bg-slate-800 disabled:opacity-80 dark:bg-slate-600 dark:hover:bg-slate-500"
 				>

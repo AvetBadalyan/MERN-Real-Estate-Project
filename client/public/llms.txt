@@ -1,0 +1,15 @@
+# Avet's Estate
+
+> A MERN-stack real estate web app for browsing, searching, and comparing property listings for rent and sale across 10 countries, with favorites, image galleries, a mortgage calculator, and direct seller contact.
+
+## Pages
+
+- [Home](https://avets-real-estate.vercel.app/): Featured offers, recent rentals and sales.
+- [Search](https://avets-real-estate.vercel.app/search): Filter listings by keyword, type, country, city, amenities, and price.
+- [Sign in](https://avets-real-estate.vercel.app/sign-in): Email/password or Google authentication.
+- [Sign up](https://avets-real-estate.vercel.app/sign-up): Create an account.
+
+## Notes
+
+- Single-page React application (Vite).
+- Listing data is served from a REST API under /api/listing.

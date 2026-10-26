@@ -21,6 +21,9 @@ export function ThemeProvider({ children }) {
 		} else {
 			document.documentElement.classList.remove('dark')
 		}
+		// Keep the mobile address-bar color in sync with the theme.
+		const meta = document.getElementById('theme-color-meta')
+		if (meta) meta.setAttribute('content', darkMode ? '#0f172a' : '#f1f5f9')
 	}, [darkMode])
 
 	const toggleDarkMode = () => {

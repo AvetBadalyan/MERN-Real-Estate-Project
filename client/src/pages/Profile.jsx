@@ -16,9 +16,10 @@ import {
 	updateUserSuccess,
 } from '../redux/user/userSlice'
 import {
-	FALLBACK_AVATAR_IMAGE,
 	getAvatarImageUrl,
 	getListingImageUrl,
+	handleAvatarImageError,
+	handleListingImageError,
 } from '../utils/images'
 import { uploadImage } from '../utils/uploadImage'
 
@@ -34,6 +35,7 @@ export default function Profile() {
 	const [userListings, setUserListings] = useState([])
 	const [modalOpen, setModalOpen] = useState(false)
 	const [confirmationAction, setConfirmationAction] = useState(() => () => {})
+	const [confirmationMessage, setConfirmationMessage] = useState('')
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -69,6 +71,7 @@ export default function Profile() {
 		try {
 			const res = await fetch(`/api/user/${currentUser._id}`, {
 				method: 'PUT',
+				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
 				},
@@ -88,8 +91,9 @@ export default function Profile() {
 		}
 	}
 
-	const confirmAndExecute = action => {
+	const confirmAndExecute = (action, message) => {
 		setConfirmationAction(() => action)
+		setConfirmationMessage(message || 'Are you sure you want to proceed?')
 		setModalOpen(true)
 	}
 
@@ -99,6 +103,7 @@ export default function Profile() {
 			try {
 				const res = await fetch(`/api/user/${currentUser._id}`, {
 					method: 'DELETE',
+					credentials: 'include',
 				})
 				const data = await res.json()
 				if (data.success === false) {
@@ -112,13 +117,15 @@ export default function Profile() {
 				dispatch(deleteUserFailure(error.message))
 				toast.error(error.message)
 			}
-		})
+		}, 'Delete your account permanently? This removes your profile and cannot be undone.')
 	}
 
 	const handleSignOut = async () => {
 		dispatch(signOutUserStart())
 		try {
-			const res = await fetch('/api/auth/signout')
+			const res = await fetch('/api/auth/signout', {
+				credentials: 'include',
+			})
 			const data = await res.json()
 			if (data.success === false) {
 				dispatch(signOutUserFailure(data.message))
@@ -136,7 +143,9 @@ export default function Profile() {
 	const handleShowListings = async () => {
 		try {
 			setShowListingsError(false)
-			const res = await fetch(`/api/user/listings/${currentUser._id}`)
+			const res = await fetch(`/api/user/listings/${currentUser._id}`, {
+				credentials: 'include',
+			})
 			const data = await res.json()
 			if (data.success === false) {
 				setShowListingsError(true)
@@ -154,6 +163,7 @@ export default function Profile() {
 			try {
 				const res = await fetch(`/api/listing/${listingId}`, {
 					method: 'DELETE',
+					credentials: 'include',
 				})
 				const data = await res.json()
 				if (data.success === false) {
@@ -168,7 +178,7 @@ export default function Profile() {
 				toast.error(error.message)
 				console.error(error.message)
 			}
-		})
+		}, 'Delete this listing? This action cannot be undone.')
 	}
 
 	return (
@@ -184,23 +194,22 @@ export default function Profile() {
 					accept="image/*"
 					onChange={e => setFile(e.target.files[0])}
 				/>
-				<div className="group relative mt-2 h-24 w-24 cursor-pointer self-center">
+				<button
+					type="button"
+					onClick={() => fileRef.current.click()}
+					className="group relative mt-2 h-24 w-24 self-center rounded-full"
+					aria-label="Change profile photo"
+				>
 					<img
 						src={getAvatarImageUrl(formData.avatar || currentUser.avatar)}
 						alt="profile"
 						className="h-24 w-24 rounded-full object-cover transition-opacity group-hover:opacity-75"
-						onClick={() => fileRef.current.click()}
-						onError={e => {
-							e.currentTarget.src = FALLBACK_AVATAR_IMAGE
-						}}
+						onError={handleAvatarImageError}
 					/>
-					<div
-						className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100"
-						onClick={() => fileRef.current.click()}
-					>
+					<span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
 						<span className="text-xs font-medium text-white">Change photo</span>
-					</div>
-				</div>
+					</span>
+				</button>
 				<p className="self-center text-sm">
 					{fileUploadError ? (
 						<span className="text-red-600 dark:text-red-400">
@@ -216,33 +225,49 @@ export default function Profile() {
 						</span>
 					) : null}
 				</p>
+				<label htmlFor="username" className="sr-only">
+					Username
+				</label>
 				<input
 					type="text"
 					placeholder="Username"
 					id="username"
+					name="username"
+					autoComplete="username"
 					defaultValue={currentUser.username}
 					className="form-input"
 					onChange={handleChange}
 				/>
+				<label htmlFor="email" className="sr-only">
+					Email
+				</label>
 				<input
 					type="email"
 					placeholder="Email"
 					id="email"
+					name="email"
+					autoComplete="email"
 					defaultValue={currentUser.email}
 					className="form-input"
 					onChange={handleChange}
 				/>
 				<div className="relative">
+					<label htmlFor="password" className="sr-only">
+						New password
+					</label>
 					<input
 						type={showPassword ? 'text' : 'password'}
 						placeholder="New password (leave blank to keep current)"
 						id="password"
+						name="password"
+						autoComplete="new-password"
 						className="form-input w-full pr-10"
 						onChange={handleChange}
 					/>
 					<button
 						type="button"
 						onClick={() => setShowPassword(!showPassword)}
+						aria-label={showPassword ? 'Hide password' : 'Show password'}
 						className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:text-slate-400"
 					>
 						{showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -257,28 +282,30 @@ export default function Profile() {
 				</button>
 				<Link
 					to="/create-listing"
-					className="rounded-lg bg-amber-600 p-3 text-center uppercase text-white hover:bg-amber-700"
+					className="rounded-lg bg-amber-700 p-3 text-center uppercase text-white hover:bg-amber-800"
 				>
 					Create Listing
 				</Link>
 			</form>
 			<div className="mt-4 flex justify-between">
-				<span
+				<button
+					type="button"
 					onClick={handleDeleteUser}
-					className="cursor-pointer text-red-700 hover:underline dark:text-red-500"
+					className="text-red-700 hover:underline dark:text-red-500"
 				>
 					Delete account
-				</span>
-				<span
+				</button>
+				<button
+					type="button"
 					onClick={handleSignOut}
-					className="cursor-pointer text-red-700 hover:underline dark:text-red-500"
+					className="text-red-700 hover:underline dark:text-red-500"
 				>
 					Sign out
-				</span>
+				</button>
 			</div>
 
 			<button
-				className="mt-4 w-full rounded-lg bg-amber-600 p-3 text-center uppercase text-white hover:bg-amber-700"
+				className="mt-4 w-full rounded-lg bg-amber-700 p-3 text-center uppercase text-white hover:bg-amber-800"
 				onClick={handleShowListings}
 			>
 				Show My Listings
@@ -301,8 +328,10 @@ export default function Profile() {
 						>
 							<Link to={`/listing/${listing._id}`} className="w-full sm:w-auto">
 								<img
-									src={getListingImageUrl(listing.imageUrls[0])}
-									alt="listing cover"
+									src={getListingImageUrl(listing.imageUrls?.[0])}
+									alt={listing.name}
+									loading="lazy"
+									onError={handleListingImageError}
 									className="h-28 w-full rounded-md object-cover sm:h-16 sm:w-16 sm:object-contain"
 								/>
 							</Link>
@@ -320,10 +349,11 @@ export default function Profile() {
 								>
 									Delete
 								</button>
-								<Link to={`/update-listing/${listing._id}`}>
-									<button className="uppercase text-amber-700 hover:underline dark:text-amber-500">
-										Edit
-									</button>
+								<Link
+									to={`/update-listing/${listing._id}`}
+									className="uppercase text-amber-700 hover:underline dark:text-amber-500"
+								>
+									Edit
 								</Link>
 							</div>
 						</div>
@@ -335,7 +365,7 @@ export default function Profile() {
 				isOpen={modalOpen}
 				onClose={() => setModalOpen(false)}
 				onConfirm={confirmationAction}
-				message="Are you sure you want to proceed?"
+				message={confirmationMessage}
 			/>
 		</div>
 	)

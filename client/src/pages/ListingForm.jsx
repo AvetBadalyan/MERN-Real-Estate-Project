@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { countries, getCitiesForCountry } from '../utils/countries'
-import { getListingImageUrl } from '../utils/images'
+import { getListingImageUrl, handleListingImageError } from '../utils/images'
 import { uploadImage } from '../utils/uploadImage'
 
 export default function ListingForm({ mode }) {
@@ -39,7 +39,8 @@ export default function ListingForm({ mode }) {
 				try {
 					const res = await fetch(`/api/listing/${params.listingId}`)
 					const data = await res.json()
-					if (data.success === false) {
+					if (!res.ok || data.success === false) {
+						toast.error('Could not load the listing to edit')
 						console.error(data.message)
 						return
 					}
@@ -57,7 +58,7 @@ export default function ListingForm({ mode }) {
 	}, [mode, params.listingId])
 
 	const handleImageSubmit = () => {
-		if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
+		if (files.length > 0 && files.length + formData.imageUrls.length <= 6) {
 			setUploading(true)
 			setImageUploadError(false)
 			const promises = Array.from(files).map(file => uploadImage(file))
@@ -122,6 +123,7 @@ export default function ListingForm({ mode }) {
 				mode === 'create' ? '/api/listing' : `/api/listing/${params.listingId}`
 			const res = await fetch(endpoint, {
 				method: mode === 'create' ? 'POST' : 'PUT',
+				credentials: 'include',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ ...formData, userRef: currentUser._id }),
 			})
@@ -386,7 +388,8 @@ export default function ListingForm({ mode }) {
 								>
 									<img
 										src={getListingImageUrl(url)}
-										alt="Uploaded"
+										alt={`Listing photo ${i + 1}`}
+										onError={handleListingImageError}
 										className="h-full w-full object-cover"
 									/>
 									<button
@@ -410,8 +413,9 @@ export default function ListingForm({ mode }) {
 									/>
 									<button
 										type="button"
-										className="w-full rounded-lg bg-amber-600 p-2 text-sm font-semibold uppercase text-white transition hover:bg-amber-700"
+										className="w-full rounded-lg bg-amber-700 p-2 text-sm font-semibold uppercase text-white transition hover:bg-amber-800 disabled:cursor-not-allowed disabled:opacity-60"
 										onClick={handleImageSubmit}
+										disabled={uploading}
 									>
 										{uploading ? 'Uploading\u2026' : 'Upload Images'}
 									</button>

@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { FaChartLine } from 'react-icons/fa'
+import { useTheme } from '../context/ThemeContext'
 import {
 	Area,
 	AreaChart,
@@ -45,8 +46,32 @@ function generatePriceHistory(currentPrice, months = 12) {
 	return data
 }
 
+// Defined outside the component so Recharts always receives a stable
+// component reference — prevents unnecessary tooltip unmount/remount.
+function CustomTooltip({ active, payload, label, type }) {
+	if (active && payload && payload.length) {
+		return (
+			<div className="rounded-lg bg-white p-3 shadow-lg dark:bg-slate-800">
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-300">
+					{label}
+				</p>
+				<p className="text-lg font-bold text-slate-800 dark:text-white">
+					${payload[0].value.toLocaleString()}
+					{type === 'rent' ? '/mo' : ''}
+				</p>
+			</div>
+		)
+	}
+	return null
+}
+
 export default function PriceHistoryChart({ currentPrice, type }) {
+	const { darkMode } = useTheme()
 	const data = useMemo(() => generatePriceHistory(currentPrice), [currentPrice])
+
+	// Theme-aware chart colors (grid/axis dim in dark mode; accent stays amber).
+	const gridColor = darkMode ? '#334155' : '#e2e8f0' // slate-700 / slate-200
+	const axisColor = darkMode ? '#94a3b8' : '#64748b' // slate-400 / slate-500
 
 	const formatPrice = value => {
 		if (value >= 1000000) {
@@ -56,23 +81,6 @@ export default function PriceHistoryChart({ currentPrice, type }) {
 			return `$${(value / 1000).toFixed(0)}K`
 		}
 		return `$${value}`
-	}
-
-	const CustomTooltip = ({ active, payload, label }) => {
-		if (active && payload && payload.length) {
-			return (
-				<div className="rounded-lg bg-white p-3 shadow-lg dark:bg-slate-800">
-					<p className="text-sm font-medium text-slate-600 dark:text-slate-300">
-						{label}
-					</p>
-					<p className="text-lg font-bold text-slate-800 dark:text-white">
-						${payload[0].value.toLocaleString()}
-						{type === 'rent' ? '/mo' : ''}
-					</p>
-				</div>
-			)
-		}
-		return null
 	}
 
 	// Calculate price change
@@ -88,6 +96,9 @@ export default function PriceHistoryChart({ currentPrice, type }) {
 					<FaChartLine className="h-5 w-5 text-amber-500" />
 					<h3 className="text-lg font-semibold text-slate-800 dark:text-white">
 						Price History
+						<span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500 dark:bg-slate-700 dark:text-slate-400">
+							Illustrative
+						</span>
 					</h3>
 				</div>
 				<div className="text-right">
@@ -121,23 +132,23 @@ export default function PriceHistoryChart({ currentPrice, type }) {
 						</defs>
 						<CartesianGrid
 							strokeDasharray="3 3"
-							stroke="#e2e8f0"
+							stroke={gridColor}
 							vertical={false}
 						/>
 						<XAxis
 							dataKey="month"
-							tick={{ fontSize: 12, fill: '#64748b' }}
+							tick={{ fontSize: 12, fill: axisColor }}
 							tickLine={false}
 							axisLine={false}
 						/>
 						<YAxis
 							tickFormatter={formatPrice}
-							tick={{ fontSize: 12, fill: '#64748b' }}
+							tick={{ fontSize: 12, fill: axisColor }}
 							tickLine={false}
 							axisLine={false}
 							width={60}
 						/>
-						<Tooltip content={<CustomTooltip />} />
+						<Tooltip content={<CustomTooltip type={type} />} />
 						<Area
 							type="monotone"
 							dataKey="price"

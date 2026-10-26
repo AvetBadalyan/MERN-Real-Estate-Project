@@ -55,6 +55,16 @@ export default function Listing() {
 		fetchListing()
 	}, [params.listingId])
 
+	// Update page title per listing for SEO and browser tab readability.
+	useEffect(() => {
+		if (!listing) return
+		const prev = document.title
+		document.title = `${listing.name} — Avet's Estate`
+		return () => {
+			document.title = prev
+		}
+	}, [listing])
+
 	if (loading) {
 		return (
 			<div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
@@ -80,7 +90,7 @@ export default function Listing() {
 	}
 
 	return (
-		<main>
+		<div>
 			{listing && (
 				<div>
 					<ImageGallery images={listing.imageUrls} />
@@ -139,7 +149,7 @@ export default function Listing() {
 								{listing.type === 'rent' ? 'For Rent' : 'For Sale'}
 							</p>
 							{listing.offer && (
-								<p className="w-full max-w-[200px] rounded-md bg-amber-600 p-1 text-center text-white">
+								<p className="w-full max-w-[200px] rounded-md bg-amber-800 p-1 text-center text-white">
 									${+listing.regularPrice - +listing.discountPrice} OFF
 								</p>
 							)}
@@ -243,6 +253,6 @@ export default function Listing() {
 					</div>
 				</div>
 			)}
-		</main>
+		</div>
 	)
 }

@@ -3,7 +3,7 @@ import { MdCompareArrows, MdLocationOn } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import EmptyState from '../components/EmptyState'
 import { useCompare } from '../context/CompareContext'
-import { getListingImageUrl } from '../utils/images'
+import { getListingImageUrl, handleListingImageError } from '../utils/images'
 
 export default function Compare() {
 	const { compareList, removeFromCompare, clearCompare } = useCompare()
@@ -96,8 +96,10 @@ export default function Compare() {
 						</button>
 						<Link to={`/listing/${listing._id}`}>
 							<img
-								src={getListingImageUrl(listing.imageUrls[0])}
+								src={getListingImageUrl(listing.imageUrls?.[0])}
 								alt={listing.name}
+								loading="lazy"
+								onError={handleListingImageError}
 								className="h-48 w-full object-cover"
 							/>
 							<div className="p-4">
@@ -119,6 +121,7 @@ export default function Compare() {
 			<div className="overflow-hidden rounded-xl bg-white shadow-lg dark:bg-slate-800">
 				<div className="overflow-x-auto">
 					<table className="w-full">
+						<caption className="sr-only">Property comparison table</caption>
 						<thead>
 							<tr className="border-b bg-slate-50 dark:border-slate-700 dark:bg-slate-900">
 								<th className="px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-slate-200">
@@ -127,11 +130,9 @@ export default function Compare() {
 								{compareList.map(listing => (
 									<th
 										key={listing._id}
-										className="px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-slate-200"
+										className="max-w-[140px] px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-slate-200"
 									>
-										{listing.name.length > 20
-											? listing.name.slice(0, 20) + '...'
-											: listing.name}
+										<span className="block truncate">{listing.name}</span>
 									</th>
 								))}
 							</tr>

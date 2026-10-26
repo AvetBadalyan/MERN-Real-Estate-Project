@@ -6,6 +6,9 @@ import ListingItem from '../components/ListingItem'
 import SkeletonCard from '../components/SkeletonCard'
 import { countries, getCitiesForCountry } from '../utils/countries'
 
+// Matches the backend default page size (listing-controller: limit || 9).
+const PAGE_SIZE = 9
+
 export default function Search() {
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -74,19 +77,27 @@ export default function Search() {
 			order: params.order || 'desc',
 		})
 
+		// Abort a stale request when filters change quickly, so an older
+		// response can't overwrite a newer one.
+		const controller = new AbortController()
+
 		const fetchListings = async () => {
 			setLoading(true)
 			setShowMore(false)
 			try {
 				const searchQuery = new URLSearchParams(params).toString()
-				const res = await fetch(`/api/listing?${searchQuery}`)
+				const res = await fetch(`/api/listing?${searchQuery}`, {
+					signal: controller.signal,
+				})
 				const data = await res.json()
-				if (data.length === 0 && Object.keys(params).length > 0) {
+				const list = Array.isArray(data) ? data : []
+				if (list.length === 0 && Object.keys(params).length > 0) {
 					toast.info('No listings match your filters.')
 				}
-				setShowMore(data.length > 8)
-				setListings(data)
+				setShowMore(list.length >= PAGE_SIZE)
+				setListings(list)
 			} catch (error) {
+				if (error.name === 'AbortError') return
 				toast.error('Failed to fetch listings.')
 				console.error('Failed to fetch listings:', error)
 			} finally {
@@ -95,6 +106,8 @@ export default function Search() {
 		}
 
 		fetchListings()
+
+		return () => controller.abort()
 	}, [location.search, getParams])
 
 	const handleChange = useCallback(e => {
@@ -142,8 +155,9 @@ export default function Search() {
 		try {
 			const res = await fetch(`/api/listing?${urlParams.toString()}`)
 			const data = await res.json()
-			setShowMore(data.length >= 9)
-			setListings(prevListings => [...prevListings, ...data])
+			const list = Array.isArray(data) ? data : []
+			setShowMore(list.length >= PAGE_SIZE)
+			setListings(prevListings => [...prevListings, ...list])
 		} catch (error) {
 			toast.error('Failed to fetch more listings.')
 			console.error('Failed to fetch more listings:', error)

@@ -42,10 +42,11 @@ export default function MortgageCalculator({ price, type }) {
 	}
 
 	return (
-		<div className="rounded-xl bg-white p-6 shadow-lg dark:bg-slate-800">
+		<div className="overflow-hidden rounded-xl bg-white p-6 shadow-lg dark:bg-slate-800">
 			{/* Header */}
 			<button
 				onClick={() => setIsExpanded(!isExpanded)}
+				aria-expanded={isExpanded}
 				className="flex w-full items-center justify-between"
 			>
 				<div className="flex items-center gap-2">
@@ -149,10 +150,11 @@ export default function MortgageCalculator({ price, type }) {
 								{[15, 20, 30].map(term => (
 									<button
 										key={term}
+										type="button"
 										onClick={() => setLoanTerm(term)}
 										className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${
 											loanTerm === term
-												? 'bg-amber-600 text-white'
+												? 'bg-amber-700 text-white'
 												: 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
 										}`}
 									>

@@ -13,11 +13,22 @@ const getCookieOptions = () => ({
 	maxAge: COOKIE_MAX_AGE,
 })
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export const signup = async (req, res, next) => {
 	const { username, email, password } = req.body
 
 	if (!username || !email || !password) {
 		return next(errorHandler(400, 'All fields are required'))
+	}
+	if (typeof username !== 'string' || username.trim().length < 3) {
+		return next(errorHandler(400, 'Username must be at least 3 characters'))
+	}
+	if (typeof email !== 'string' || !EMAIL_REGEX.test(email)) {
+		return next(errorHandler(400, 'Please provide a valid email address'))
+	}
+	if (typeof password !== 'string' || password.length < 6) {
+		return next(errorHandler(400, 'Password must be at least 6 characters'))
 	}
 
 	const hashedPassword = bcryptjs.hashSync(password, 10)
@@ -32,8 +43,12 @@ export const signup = async (req, res, next) => {
 
 export const signin = async (req, res, next) => {
 	const { email, password } = req.body
+	if (!email || !password) {
+		return next(errorHandler(400, 'Email and password are required'))
+	}
 	try {
-		const validUser = await User.findOne({ email })
+		// Coerce to string so an object (e.g. { $gt: '' }) can't be used as a query operator.
+		const validUser = await User.findOne({ email: String(email) })
 		if (!validUser) {
 			return next(errorHandler(404, 'user not found!'))
 		}
@@ -52,8 +67,12 @@ export const signin = async (req, res, next) => {
 }
 
 export const google = async (req, res, next) => {
+	const { email, name, photo } = req.body
+	if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email)) {
+		return next(errorHandler(400, 'A valid email is required'))
+	}
 	try {
-		const user = await User.findOne({ email: req.body.email })
+		const user = await User.findOne({ email })
 		if (user) {
 			const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
 				expiresIn: TOKEN_EXPIRY,
@@ -68,13 +87,15 @@ export const google = async (req, res, next) => {
 				Math.random().toString(36).slice(-8) +
 				Math.random().toString(36).slice(-8)
 			const hashedPassword = bcryptjs.hashSync(generatedPassword, 10)
+			const baseName = (name || email.split('@')[0])
+				.split(' ')
+				.join('')
+				.toLowerCase()
 			const newUser = new User({
-				username:
-					req.body.name.split(' ').join('').toLowerCase() +
-					Math.random().toString(36).slice(-4),
-				email: req.body.email,
+				username: baseName + Math.random().toString(36).slice(-4),
+				email,
 				password: hashedPassword,
-				avatar: req.body.photo,
+				avatar: photo,
 			})
 			await newUser.save()
 			const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {

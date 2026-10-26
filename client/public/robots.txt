@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://avets-real-estate.vercel.app/sitemap.xml

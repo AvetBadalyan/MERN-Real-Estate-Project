@@ -7,7 +7,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useCompare } from '../context/CompareContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { useTheme } from '../context/ThemeContext'
-import { FALLBACK_AVATAR_IMAGE, getAvatarImageUrl } from '../utils/images'
+import { getAvatarImageUrl, handleAvatarImageError } from '../utils/images'
 
 export default function Header() {
 	const { currentUser } = useSelector(state => state.user)
@@ -36,15 +36,19 @@ export default function Header() {
 			<div className="mx-auto flex max-w-7xl items-center justify-between gap-2 py-3">
 				<Link to="/" className="shrink-0">
 					<h1 className="flex whitespace-nowrap text-sm font-bold sm:text-xl">
-						<span className="text-slate-500 dark:text-slate-400">Avet's</span>
-						<span className="text-slate-700 dark:text-white">Estate</span>
+						<span className="text-slate-700 dark:text-slate-300">Avet's</span>
+						<span className="text-slate-900 dark:text-white">Estate</span>
 					</h1>
 				</Link>
 				<form
 					onSubmit={handleSubmit}
 					className="flex flex-1 max-w-xs items-center rounded-lg bg-slate-100 px-3 py-2 dark:bg-slate-700 sm:max-w-sm sm:p-3 md:max-w-md"
 				>
+					<label htmlFor="header-search" className="sr-only">
+						Search listings
+					</label>
 					<input
+						id="header-search"
 						type="text"
 						placeholder="Search..."
 						className="min-w-0 w-full bg-transparent focus:outline-none dark:text-white dark:placeholder-slate-400"
@@ -53,6 +57,7 @@ export default function Header() {
 					/>
 					<button
 						type="submit"
+						aria-label="Search listings"
 						className="p-1 text-slate-600 hover:text-amber-700 dark:text-slate-300 dark:hover:text-amber-500"
 					>
 						<FaSearch />
@@ -82,6 +87,7 @@ export default function Header() {
 							to="/compare"
 							className="relative flex items-center text-slate-700 transition-colors hover:text-blue-500 dark:text-slate-300"
 							title="Compare properties"
+							aria-label="Compare properties"
 						>
 							<MdCompareArrows className="h-6 w-6" />
 							{compareCount > 0 && (
@@ -96,6 +102,7 @@ export default function Header() {
 							to="/favorites"
 							className="relative flex items-center text-slate-700 transition-colors hover:text-red-500 dark:text-slate-300"
 							title="Your favorites"
+							aria-label="Your favorites"
 						>
 							<FaHeart className="h-5 w-5" />
 							{favoritesCount > 0 && (
@@ -111,11 +118,8 @@ export default function Header() {
 								<img
 									className="h-7 w-7 rounded-full object-cover"
 									src={getAvatarImageUrl(currentUser.avatar)}
-									alt="profile"
-									title="Your profile"
-									onError={e => {
-										e.currentTarget.src = FALLBACK_AVATAR_IMAGE
-									}}
+									alt="Your profile"
+									onError={handleAvatarImageError}
 								/>
 							</Link>
 						) : (

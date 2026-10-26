@@ -9,8 +9,13 @@ const STORAGE_KEY = 'avets-estate-compare'
 
 export function CompareProvider({ children }) {
 	const [compareList, setCompareList] = useState(() => {
-		const stored = localStorage.getItem(STORAGE_KEY)
-		return stored ? JSON.parse(stored) : []
+		try {
+			const stored = localStorage.getItem(STORAGE_KEY)
+			const parsed = stored ? JSON.parse(stored) : []
+			return Array.isArray(parsed) ? parsed : []
+		} catch {
+			return []
+		}
 	})
 
 	useEffect(() => {

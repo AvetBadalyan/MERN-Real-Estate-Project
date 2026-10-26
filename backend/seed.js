@@ -177,59 +177,46 @@ const descriptions = [
 	'Eco-friendly home with energy-efficient systems. Solar panels, smart thermostat, and sustainable materials throughout.',
 ]
 
-// Real estate images from Unsplash (free to use)
-const imageCollections = [
-	[
-		'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800',
-		'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
-		'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800',
-	],
-	[
-		'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800',
-		'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800',
-		'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800',
-	],
-	[
-		'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800',
-		'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800',
-		'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800',
-	],
-	[
-		'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=800',
-		'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800',
-		'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800',
-	],
-	[
-		'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
-		'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800',
-		'https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800',
-	],
-	[
-		'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800',
-		'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800',
-		'https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800',
-	],
-	[
-		'https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=800',
-		'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800',
-		'https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=800',
-	],
-	[
-		'https://images.unsplash.com/photo-1600047509358-9dc75507daeb?w=800',
-		'https://images.unsplash.com/photo-1600566752734-2a0cd66c42b3?w=800',
-		'https://images.unsplash.com/photo-1600585154363-67eb9e2e2099?w=800',
-	],
-	[
-		'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800',
-		'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800',
-		'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800',
-	],
-	[
-		'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800',
-		'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800',
-		'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=800',
-	],
+// Real estate images hosted on the project's own Cloudinary account.
+// Served from the app's own cloud so they don't depend on (and can't be blocked
+// as) a third-party image host like Unsplash. Version segments are omitted so
+// Cloudinary always serves the current version of each public_id.
+const CDN = 'https://res.cloudinary.com/dkaknfwcl/image/upload/avets-estate'
+
+// Pool of real property photos (excludes the hero .png, avatar .svg and the
+// generic fallback .jpg).
+const propertyImages = [
+	`${CDN}/cbtv207hgfpmegk775ap.jpg`,
+	`${CDN}/cjonvvtgt1mdw38lgikj.jpg`,
+	`${CDN}/dfmfmfdaos8vfm8g3y2x.jpg`,
+	`${CDN}/dhk1gbcrh3a80wlod2m1.jpg`,
+	`${CDN}/dpchshpp5xwkvwqsi7qs.jpg`,
+	`${CDN}/em1gckk7bhw0qfv1mb1a.jpg`,
+	`${CDN}/fmwpu7tocjact7ihdjig.jpg`,
+	`${CDN}/foqpfmjoqewhelyvra3a.jpg`,
+	`${CDN}/fpeoapwa5rbqqdn5yuqd.jpg`,
+	`${CDN}/gfiyynzhocdi7mm709re.jpg`,
+	`${CDN}/hyjf8kpvrxsfrqutv6w2.jpg`,
+	`${CDN}/iqxdk6upzkf2bdyphdoq.jpg`,
+	`${CDN}/k3p70sd1mdu2eljpzvms.jpg`,
+	`${CDN}/l8i3onggvu0g76omnx4q.png`,
+	`${CDN}/l9ytghbxn33kyzbj88df.jpg`,
+	`${CDN}/lamdanso0aja0goebm89.jpg`,
+	`${CDN}/okydekojrrpxh98pojdd.jpg`,
+	`${CDN}/ry8xuleoyz28pwrjf6yx.jpg`,
+	`${CDN}/skyg6q8zs2igrihbb5tz.webp`,
+	`${CDN}/ufq9d7eqpnrme3zfmrou.webp`,
+	`${CDN}/vvgil7vd9tdpthvk5b21.jpg`,
+	`${CDN}/wkwczcxksao0hxdljhqw.jpg`,
+	`${CDN}/zs03dihrxgn6nq4gfq7b.webp`,
 ]
+
+// Build 10 collections of 3 images each, cycling through the pool.
+const imageCollections = Array.from({ length: 10 }, (_, group) => [
+	propertyImages[(group * 3) % propertyImages.length],
+	propertyImages[(group * 3 + 1) % propertyImages.length],
+	propertyImages[(group * 3 + 2) % propertyImages.length],
+])
 
 // Helper function to get random element from array
 const getRandom = arr => arr[Math.floor(Math.random() * arr.length)]

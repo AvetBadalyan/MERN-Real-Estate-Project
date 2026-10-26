@@ -1,0 +1,18 @@
+{
+	"name": "Avet's Estate",
+	"short_name": "Avet's Estate",
+	"description": "Browse, search, and compare property listings for rent and sale across 10 countries.",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"background_color": "#f1f5f9",
+	"theme_color": "#f1f5f9",
+	"icons": [
+		{
+			"src": "/favicon.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any maskable"
+		}
+	]
+}

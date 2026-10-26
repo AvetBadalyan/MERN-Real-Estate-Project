@@ -2,16 +2,73 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="./favicon.png" />
+		<link rel="icon" type="image/png" href="./favicon.png" />
+		<link rel="apple-touch-icon" href="./favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="color-scheme" content="light dark" />
+		<meta name="theme-color" content="#f1f5f9" id="theme-color-meta" />
+		<link rel="manifest" href="/manifest.webmanifest" />
+		<meta
+			name="description"
+			content="Avet's Estate — browse, search, and compare property listings for rent and sale across 10 countries, with favorites, image galleries, and direct seller contact."
+		/>
+
+		<!-- Open Graph / social sharing -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Avet's Estate — Real Estate Listings" />
+		<meta
+			property="og:description"
+			content="Browse, search, and compare property listings for rent and sale across 10 countries."
+		/>
+		<meta property="og:url" content="https://avets-real-estate.vercel.app" />
+		<meta
+			property="og:image"
+			content="https://res.cloudinary.com/dkaknfwcl/image/upload/f_auto,q_auto,w_1200/avets-estate/ixodcblawsxjfc2c0vmj.png"
+		/>
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Avet's Estate — Real Estate Listings" />
+		<meta
+			name="twitter:description"
+			content="Browse, search, and compare property listings for rent and sale across 10 countries."
+		/>
+		<meta
+			name="twitter:image"
+			content="https://res.cloudinary.com/dkaknfwcl/image/upload/f_auto,q_auto,w_1200/avets-estate/ixodcblawsxjfc2c0vmj.png"
+		/>
+
+		<!-- Apply the saved/preferred theme before first paint to avoid a flash of the wrong theme -->
+		<script>
+			;(function () {
+				try {
+					var stored = localStorage.getItem('avets-estate-theme')
+					var dark =
+						stored !== null
+							? stored === 'dark'
+							: window.matchMedia('(prefers-color-scheme: dark)').matches
+					if (dark) document.documentElement.classList.add('dark')
+					var meta = document.getElementById('theme-color-meta')
+					// slate-900 for dark, slate-100 for light — matches the app background
+					if (meta) meta.setAttribute('content', dark ? '#0f172a' : '#f1f5f9')
+				} catch (e) {}
+			})()
+		</script>
+
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<!-- Load fonts without blocking render; swap in when ready -->
 		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
 			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+			media="print"
+			onload="this.media='all'"
 		/>
-		<title>Avet's Real Estate Website</title>
+		<noscript>
+			<link
+				rel="stylesheet"
+				href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+			/>
+		</noscript>
+		<title>Avet's Estate — Real Estate Listings</title>
 	</head>
 	<body>
 		<div id="root"></div>

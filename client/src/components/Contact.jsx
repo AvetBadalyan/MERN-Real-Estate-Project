@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export default function Contact({ listing }) {
@@ -11,15 +10,20 @@ export default function Contact({ listing }) {
 	}
 
 	useEffect(() => {
+		const controller = new AbortController()
+
 		const fetchSeller = async () => {
 			try {
-				const res = await fetch(`/api/user/${listing.userRef}`)
+				const res = await fetch(`/api/user/${listing.userRef}`, {
+					signal: controller.signal,
+				})
 				const data = await res.json()
 				if (!res.ok || data.success === false) {
 					throw new Error(data.message || 'Error fetching seller information')
 				}
 				setSeller(data)
 			} catch (error) {
+				if (error.name === 'AbortError') return
 				console.error('Error fetching seller:', error)
 				toast.error(
 					'Error fetching seller information. Please try again later.'
@@ -28,6 +32,7 @@ export default function Contact({ listing }) {
 		}
 
 		fetchSeller()
+		return () => controller.abort()
 	}, [listing.userRef])
 
 	if (!seller) {
@@ -54,6 +59,9 @@ export default function Contact({ listing }) {
 					{listing.name}
 				</span>
 			</p>
+			<label htmlFor="message" className="sr-only">
+				Message to seller
+			</label>
 			<textarea
 				name="message"
 				id="message"
@@ -63,12 +71,12 @@ export default function Contact({ listing }) {
 				placeholder="Enter your message here..."
 				className="form-input w-full"
 			/>
-			<Link
-				to={`mailto:${seller.email}?subject=${subject}&body=${body}`}
+			<a
+				href={`mailto:${seller.email}?subject=${subject}&body=${body}`}
 				className="rounded-lg bg-slate-700 p-3 text-center font-semibold uppercase text-white transition hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
 			>
 				Send Message
-			</Link>
+			</a>
 		</div>
 	)
 }
