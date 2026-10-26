@@ -20,12 +20,13 @@ export default defineConfig(({ mode }) => {
 			sourcemap: true,
 			rollupOptions: {
 				output: {
-					// Split large third-party libs into separate cacheable chunks
-					// so they aren't all in the initial bundle.
 					manualChunks: {
 						'react-vendor': ['react', 'react-dom', 'react-router-dom'],
 						redux: ['@reduxjs/toolkit', 'react-redux', 'redux-persist'],
-						charts: ['recharts'],
+						// recharts is intentionally NOT listed here — it's only imported
+						// in Listing.jsx (lazy), so Vite bundles it there automatically.
+						// Listing manualChunks would cause an eager modulepreload on every
+						// page, loading 100 KB on the home page before it's ever needed.
 						swiper: ['swiper'],
 						firebase: ['firebase/app', 'firebase/auth'],
 					},

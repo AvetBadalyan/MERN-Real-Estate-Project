@@ -55,6 +55,16 @@
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="preconnect" href="https://res.cloudinary.com" />
+		<!-- Preload the LCP hero image so the browser starts fetching it
+		     before the JS bundle runs, not after. srcset picks the right size. -->
+		<link
+			rel="preload"
+			as="image"
+			fetchpriority="high"
+			imagesrcset="https://res.cloudinary.com/dkaknfwcl/image/upload/f_auto,q_auto:eco,w_800/avets-estate/ixodcblawsxjfc2c0vmj.png 800w, https://res.cloudinary.com/dkaknfwcl/image/upload/f_auto,q_auto:eco,w_1200/avets-estate/ixodcblawsxjfc2c0vmj.png 1200w, https://res.cloudinary.com/dkaknfwcl/image/upload/f_auto,q_auto:eco,w_1600/avets-estate/ixodcblawsxjfc2c0vmj.png 1600w"
+			imagesizes="100vw"
+		/>
 		<!-- Load fonts without blocking render; swap in when ready -->
 		<link
 			rel="stylesheet"

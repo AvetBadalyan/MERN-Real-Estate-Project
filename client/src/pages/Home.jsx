@@ -13,7 +13,7 @@ import { Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import ListingItem from '../components/ListingItem'
 import SkeletonCard from '../components/SkeletonCard'
-import { getListingImageUrl, HERO_IMAGE } from '../utils/images'
+import { getListingImageUrl, HERO_IMAGE, HERO_SRCSET } from '../utils/images'
 
 const heroImage = HERO_IMAGE
 
@@ -126,6 +126,8 @@ export default function Home() {
 				    prioritize the LCP image. */}
 				<img
 					src={heroImage}
+					srcSet={HERO_SRCSET}
+					sizes="100vw"
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
