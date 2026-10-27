@@ -20,9 +20,9 @@ export default function EmptyState({
 			</div>
 
 			{/* Text */}
-			<h3 className="mb-2 text-xl font-semibold text-slate-700 dark:text-slate-200">
+			<h2 className="mb-2 text-xl font-semibold text-slate-700 dark:text-slate-200">
 				{title}
-			</h3>
+			</h2>
 			<p className="mb-6 max-w-md text-slate-500 dark:text-slate-400">
 				{message}
 			</p>

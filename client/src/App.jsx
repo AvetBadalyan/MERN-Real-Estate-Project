@@ -18,7 +18,11 @@ const Profile = lazy(() => import('./pages/Profile'))
 
 function PageFallback() {
 	return (
-		<div className="flex min-h-[60vh] items-center justify-center" role="status" aria-live="polite">
+		<div
+			className="flex min-h-[60vh] items-center justify-center"
+			role="status"
+			aria-live="polite"
+		>
 			<div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-slate-700 dark:border-slate-600 dark:border-t-slate-300" />
 			<span className="sr-only">Loading…</span>
 		</div>
@@ -28,7 +32,7 @@ function PageFallback() {
 export default function App() {
 	return (
 		<BrowserRouter>
-			<div className="min-h-screen bg-slate-100 dark:bg-slate-900">
+			<div className="min-h-screen overflow-x-hidden bg-slate-100 dark:bg-slate-900">
 				<a
 					href="#main-content"
 					className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-slate-900 focus:shadow-lg"

@@ -14,7 +14,8 @@ export const FALLBACK_AVATAR_IMAGE = placeholderAvatar
 //   w_X        → resize to the requested width
 function withTransforms(url, width = 800) {
 	if (!url || typeof url !== 'string') return url
-	if (!url.includes('res.cloudinary.com') || !url.includes('/upload/')) return url
+	if (!url.includes('res.cloudinary.com') || !url.includes('/upload/'))
+		return url
 	if (url.includes('f_auto')) return url // transforms already present, skip
 	return url.replace('/upload/', `/upload/f_auto,q_auto:eco,w_${width}/`)
 }
@@ -39,7 +40,11 @@ export const HERO_SRCSET = [
 
 // Listing cards show at ~280–400 px wide; this default covers the fallback src
 // for browsers that don't support srcset (all modern ones do).
-export function getListingImageUrl(url, fallback = FALLBACK_LISTING_IMAGE, width = 400) {
+export function getListingImageUrl(
+	url,
+	fallback = FALLBACK_LISTING_IMAGE,
+	width = 400
+) {
 	if (!url) return fallback
 	return withTransforms(url, width)
 }

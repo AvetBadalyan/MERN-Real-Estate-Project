@@ -15,8 +15,6 @@ import ListingItem from '../components/ListingItem'
 import SkeletonCard from '../components/SkeletonCard'
 import { getListingImageUrl, HERO_IMAGE, HERO_SRCSET } from '../utils/images'
 
-const heroImage = HERO_IMAGE
-
 const quickLinks = [
 	{ label: 'Buy', to: '/search?type=sale', icon: FaHome },
 	{ label: 'Rent', to: '/search?type=rent', icon: FaKey },
@@ -58,7 +56,7 @@ function ListingSection({
 					</h2>
 				</div>
 				<Link
-					className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-amber-700 dark:text-slate-300"
+					className="group inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-slate-700 hover:text-amber-700 dark:text-slate-300"
 					to={linkTo}
 				>
 					{linkText}
@@ -125,12 +123,13 @@ export default function Home() {
 				{/* Real <img> (not a CSS background) so the browser can discover and
 				    prioritize the LCP image. */}
 				<img
-					src={heroImage}
+					src={HERO_IMAGE}
 					srcSet={HERO_SRCSET}
 					sizes="100vw"
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
+					decoding="async"
 					onError={e => {
 						e.currentTarget.style.display = 'none'
 					}}
@@ -244,7 +243,7 @@ export default function Home() {
 							</div>
 							<Link
 								to="/search?offer=true"
-								className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-amber-700 dark:text-slate-300"
+								className="group inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-slate-700 hover:text-amber-700 dark:text-slate-300"
 							>
 								See all offers
 								<FaArrowRight className="transition-transform group-hover:translate-x-1" />
