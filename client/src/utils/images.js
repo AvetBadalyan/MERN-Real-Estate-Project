@@ -37,10 +37,24 @@ export const HERO_SRCSET = [
 
 // ─── Listing & avatar helpers ─────────────────────────────────────────────────
 
-// Listing cards show at ~300–400 px wide; 450 px covers 2× retina without waste.
-export function getListingImageUrl(url, fallback = FALLBACK_LISTING_IMAGE, width = 450) {
+// Listing cards show at ~280–400 px wide; this default covers the fallback src
+// for browsers that don't support srcset (all modern ones do).
+export function getListingImageUrl(url, fallback = FALLBACK_LISTING_IMAGE, width = 400) {
 	if (!url) return fallback
 	return withTransforms(url, width)
+}
+
+// Responsive srcset for listing-card images. The browser picks the smallest
+// width that fits the card at the device's pixel density, instead of everyone
+// downloading one fixed size. Returns undefined for the local SVG fallback
+// (nothing to resize). Pair with sizes="(min-width:1280px) 300px, ...".
+export function getListingImageSrcSet(url) {
+	if (!url || url === FALLBACK_LISTING_IMAGE) return undefined
+	return [
+		`${withTransforms(url, 300)} 300w`,
+		`${withTransforms(url, 450)} 450w`,
+		`${withTransforms(url, 600)} 600w`,
+	].join(', ')
 }
 
 export function getAvatarImageUrl(url) {

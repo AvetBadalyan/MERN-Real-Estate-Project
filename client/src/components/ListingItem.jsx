@@ -5,7 +5,11 @@ import { toast } from 'react-toastify'
 import { useCompare } from '../context/CompareContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { getFlagForCountry } from '../utils/countries'
-import { getListingImageUrl, handleListingImageError } from '../utils/images'
+import {
+	getListingImageSrcSet,
+	getListingImageUrl,
+	handleListingImageError,
+} from '../utils/images'
 
 export default function ListingItem({
 	listing,
@@ -30,7 +34,8 @@ export default function ListingItem({
 		premium,
 	} = listing
 
-	const listingImage = getListingImageUrl(imageUrls?.[0], undefined, 500)
+	const listingImage = getListingImageUrl(imageUrls?.[0])
+	const listingSrcSet = getListingImageSrcSet(imageUrls?.[0])
 	const countryFlag = getFlagForCountry(country)
 
 	const price = offer ? discountPrice : regularPrice
@@ -70,6 +75,8 @@ export default function ListingItem({
 				<div className="relative overflow-hidden">
 					<img
 						src={listingImage}
+						srcSet={listingSrcSet}
+						sizes="(min-width: 1280px) 300px, (min-width: 640px) 45vw, 100vw"
 						alt={name}
 						loading="lazy"
 						onError={handleListingImageError}
