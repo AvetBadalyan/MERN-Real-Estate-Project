@@ -152,7 +152,7 @@ export default function Profile() {
 				return
 			}
 			setUserListings(data)
-		} catch (error) {
+		} catch {
 			setShowListingsError(true)
 			toast.error('Error loading listings')
 		}

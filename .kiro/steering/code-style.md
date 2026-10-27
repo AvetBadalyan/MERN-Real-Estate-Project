@@ -35,7 +35,7 @@ Config is in `.prettierrc` at the project root. The canonical rules are:
 
 ### Client (`client/src/**`)
 
-Config: `client/.eslintrc.cjs`
+Config: `client/eslint.config.js` (ESLint 9 flat config)
 
 - `react/prop-types` is **off** — no PropTypes needed
 - `no-unused-vars` — warn (prefix unused vars/args with `_` to suppress)
@@ -47,7 +47,7 @@ Config: `client/.eslintrc.cjs`
 
 ### Backend (`backend/**`)
 
-Config: `.eslintrc.cjs` at root
+Config: `eslint.config.js` at root (ESLint 9 flat config)
 
 - Same quality rules as client
 - `console.log` is additionally allowed (server-side logging)
@@ -75,6 +75,6 @@ npm run format:check  # check formatting without writing
 2. **Never introduce spaces for indentation** in files that use tabs
 3. **Never add semicolons** to JS/JSX files in this project
 4. **Never switch quote style** mid-file
-5. After editing a file, the result must be valid according to `.prettierrc` and the relevant `.eslintrc.cjs`
+5. After editing a file, the result must be valid according to `.prettierrc` and the relevant `eslint.config.js`
 6. Do not add `// eslint-disable` comments unless there is a specific, documented reason
 7. Do not add `/* eslint-disable react/prop-types */` file-level suppression to new files — prop-types is already turned off globally
