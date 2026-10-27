@@ -21,7 +21,7 @@ export default [
 				ecmaFeatures: { jsx: true },
 			},
 		},
-		settings: { react: { version: '18.2' } },
+		settings: { react: { version: 'detect' } },
 		plugins: {
 			'react-hooks': reactHooks,
 			'react-refresh': reactRefresh,
