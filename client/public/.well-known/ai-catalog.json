@@ -1,0 +1,16 @@
+{
+	"specVersion": "1.0",
+	"host": {
+		"displayName": "Avet's Estate",
+		"identifier": "avets-real-estate.vercel.app"
+	},
+	"entries": [
+		{
+			"identifier": "urn:ai:avets-real-estate.vercel.app:knowledge:llms-txt",
+			"displayName": "Avet's Estate — site knowledge index",
+			"type": "text/plain",
+			"url": "https://avets-real-estate.vercel.app/llms.txt",
+			"description": "Index of pages and capabilities for Avet's Estate, a MERN-stack real estate app for browsing, searching, and comparing property listings for rent and sale across 10 countries."
+		}
+	]
+}
