@@ -59,12 +59,20 @@ export const updateListing = async (req, res, next) => {
 	}
 }
 
+// Cache public, read-only listing responses at Vercel's edge. s-maxage serves
+// repeat requests from the CDN (skipping the serverless cold start + DB query),
+// and stale-while-revalidate serves slightly stale data instantly while the
+// cache refreshes in the background. Listings change rarely, so 60s is safe.
+const LISTING_CACHE_CONTROL =
+	'public, s-maxage=60, stale-while-revalidate=300'
+
 export const getListing = async (req, res, next) => {
 	try {
 		const listing = await Listing.findById(req.params.id)
 		if (!listing) {
 			return next(errorHandler(404, 'Listing not found!'))
 		}
+		res.set('Cache-Control', LISTING_CACHE_CONTROL)
 		res.status(200).json(listing)
 	} catch (error) {
 		next(error)
@@ -139,6 +147,7 @@ export const getListings = async (req, res, next) => {
 			.limit(limit)
 			.skip(startIndex)
 
+		res.set('Cache-Control', LISTING_CACHE_CONTROL)
 		return res.status(200).json(listings)
 	} catch (error) {
 		next(error)
