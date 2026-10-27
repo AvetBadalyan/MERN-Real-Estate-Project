@@ -63,8 +63,7 @@ export const updateListing = async (req, res, next) => {
 // repeat requests from the CDN (skipping the serverless cold start + DB query),
 // and stale-while-revalidate serves slightly stale data instantly while the
 // cache refreshes in the background. Listings change rarely, so 60s is safe.
-const LISTING_CACHE_CONTROL =
-	'public, s-maxage=60, stale-while-revalidate=300'
+const LISTING_CACHE_CONTROL = 'public, s-maxage=60, stale-while-revalidate=300'
 
 export const getListing = async (req, res, next) => {
 	try {

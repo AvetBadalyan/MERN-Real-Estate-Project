@@ -12,7 +12,7 @@ import listingRouter from './routes/listing-route.js'
 import uploadRouter from './routes/upload-route.js'
 import userRouter from './routes/user-route.js'
 
-dotenv.config()
+dotenv.config({ quiet: true })
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -48,17 +48,23 @@ app.use(cookieParser())
 // Rate limiters: strict on auth (brute force) and uploads (abuse).
 const authLimiter = rateLimit({
 	windowMs: 15 * 60 * 1000,
-	max: 20,
+	limit: 20,
 	standardHeaders: true,
 	legacyHeaders: false,
-	message: { success: false, message: 'Too many attempts, please try again later.' },
+	message: {
+		success: false,
+		message: 'Too many attempts, please try again later.',
+	},
 })
 const uploadLimiter = rateLimit({
 	windowMs: 15 * 60 * 1000,
-	max: 50,
+	limit: 50,
 	standardHeaders: true,
 	legacyHeaders: false,
-	message: { success: false, message: 'Too many uploads, please try again later.' },
+	message: {
+		success: false,
+		message: 'Too many uploads, please try again later.',
+	},
 })
 
 // Serve legacy images from /images folder (for existing listings)

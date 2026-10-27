@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import Listing from './models/listing-model.js'
 import User from './models/user-model.js'
 
-dotenv.config()
+dotenv.config({ quiet: true })
 
 // Country data with cities and realistic property info
 const countries = [
