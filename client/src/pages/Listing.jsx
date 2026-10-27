@@ -70,10 +70,10 @@ export default function Listing() {
 			<div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
 				<div className="animate-pulse space-y-4">
 					<div className="h-72 rounded-xl bg-slate-200 dark:bg-slate-700 sm:h-96" />
-					<div className="h-8 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
-					<div className="h-4 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
-					<div className="h-4 w-full rounded bg-slate-200 dark:bg-slate-700" />
-					<div className="h-4 w-5/6 rounded bg-slate-200 dark:bg-slate-700" />
+					<div className="h-8 w-3/4 rounded-sm bg-slate-200 dark:bg-slate-700" />
+					<div className="h-4 w-1/2 rounded-sm bg-slate-200 dark:bg-slate-700" />
+					<div className="h-4 w-full rounded-sm bg-slate-200 dark:bg-slate-700" />
+					<div className="h-4 w-5/6 rounded-sm bg-slate-200 dark:bg-slate-700" />
 				</div>
 			</div>
 		)
@@ -157,7 +157,7 @@ export default function Listing() {
 
 						{/* Virtual Tour Banner for Premium Listings */}
 						{listing.premium && (
-							<div className="overflow-hidden rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 p-4 shadow-lg">
+							<div className="overflow-hidden rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 p-4 shadow-lg">
 								<div className="flex items-center justify-between">
 									<div className="flex items-center gap-3">
 										<div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">

@@ -123,7 +123,7 @@ export default function ImageGallery({ images }) {
 								onClick={() => setActiveIndex(idx)}
 								aria-label={`View image ${idx + 1}`}
 								aria-current={idx === activeIndex || undefined}
-								className={`relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-lg transition sm:h-20 sm:w-28 ${
+								className={`relative h-16 w-24 shrink-0 overflow-hidden rounded-lg transition sm:h-20 sm:w-28 ${
 									idx === activeIndex
 										? 'ring-2 ring-amber-500 ring-offset-2'
 										: 'opacity-70 hover:opacity-100'

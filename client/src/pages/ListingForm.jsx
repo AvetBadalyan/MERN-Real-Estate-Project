@@ -406,7 +406,7 @@ export default function ListingForm({ mode }) {
 								<div className="flex flex-col gap-2">
 									<input
 										type="file"
-										className="w-full rounded-lg border border-slate-300 p-2 text-sm text-slate-700 file:mr-2 file:rounded file:border-0 file:bg-slate-100 file:px-2 file:py-1 file:text-sm file:text-slate-700 dark:border-slate-600 dark:text-slate-300 dark:file:bg-slate-700 dark:file:text-slate-300"
+										className="w-full rounded-lg border border-slate-300 p-2 text-sm text-slate-700 file:mr-2 file:rounded-sm file:border-0 file:bg-slate-100 file:px-2 file:py-1 file:text-sm file:text-slate-700 dark:border-slate-600 dark:text-slate-300 dark:file:bg-slate-700 dark:file:text-slate-300"
 										multiple
 										accept="image/*"
 										onChange={e => setFiles(e.target.files)}

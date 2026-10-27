@@ -52,7 +52,7 @@ export default function Header() {
 						id="header-search"
 						type="text"
 						placeholder="Search..."
-						className="min-w-0 w-full bg-transparent focus:outline-none dark:text-white dark:placeholder-slate-400"
+						className="min-w-0 w-full bg-transparent focus:outline-hidden dark:text-white dark:placeholder-slate-400"
 						value={searchTerm}
 						onChange={e => setSearchTerm(e.target.value)}
 					/>

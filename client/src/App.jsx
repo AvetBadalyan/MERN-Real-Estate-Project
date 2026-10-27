@@ -35,7 +35,7 @@ export default function App() {
 			<div className="min-h-screen overflow-x-hidden bg-slate-100 dark:bg-slate-900">
 				<a
 					href="#main-content"
-					className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-slate-900 focus:shadow-lg"
+					className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-slate-900 focus:shadow-lg"
 				>
 					Skip to content
 				</a>

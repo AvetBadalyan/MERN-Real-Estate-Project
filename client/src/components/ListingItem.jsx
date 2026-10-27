@@ -82,7 +82,7 @@ export default function ListingItem({
 						onError={handleListingImageError}
 						className="h-[280px] w-full object-cover transition-transform duration-500 group-hover:scale-110 sm:h-[220px]"
 					/>
-					<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+					<div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 					{/* Favorite button */}
 					<button
 						onClick={handleFavoriteClick}
@@ -113,7 +113,7 @@ export default function ListingItem({
 						</span>
 					)}
 					{premium && (
-						<span className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 px-3 py-1 text-xs font-semibold text-white shadow-lg">
+						<span className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-linear-to-r from-purple-600 to-indigo-600 px-3 py-1 text-xs font-semibold text-white shadow-lg">
 							<FaVideo className="h-3 w-3" />
 							Virtual Tour
 						</span>

@@ -138,7 +138,7 @@ export default function Home() {
 				<div className="absolute inset-0 bg-slate-950/45"></div>
 				<div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-10 text-white">
 					<div className="animate-rise max-w-3xl pt-6 sm:pt-10">
-						<p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-semibold backdrop-blur">
+						<p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-semibold backdrop-blur-sm">
 							<FaMapMarkerAlt /> Homes, rentals, and investment properties
 						</p>
 						<h1 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-7xl">
@@ -164,7 +164,7 @@ export default function Home() {
 							<Link
 								key={label}
 								to={to}
-								className="group flex items-center justify-between rounded-md bg-white/90 px-4 py-4 text-slate-800 shadow-lg backdrop-blur transition hover:-translate-y-1 hover:bg-white"
+								className="group flex items-center justify-between rounded-md bg-white/90 px-4 py-4 text-slate-800 shadow-lg backdrop-blur-sm transition hover:-translate-y-1 hover:bg-white"
 							>
 								<span className="flex items-center gap-3 font-semibold">
 									<span className="rounded-md bg-amber-700 p-2 text-white">
@@ -216,7 +216,7 @@ export default function Home() {
 					{featureCards.map(card => (
 						<div
 							key={card.title}
-							className="animate-rise rounded-md border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-5"
+							className="animate-rise rounded-md border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-700 dark:bg-slate-800 sm:p-5"
 						>
 							<h2 className="text-xl font-semibold text-slate-800 dark:text-white">
 								{card.title}
